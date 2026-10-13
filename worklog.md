@@ -809,3 +809,198 @@ Work Log:
 Stage Summary:
 - Milestone 5 complete: full IELTS grammar curriculum (A1–C2, 32 lessons, 128 exercises) + all features verified across exam isolation, flashcards, quizzes, AI feedback (BYOK), grammar diagnostics, mobile responsiveness, and accessibility.
 - No data loss; no regressions detected.
+
+---
+Task ID: 3-a
+Agent: reading-author-stage-1-2 (general-purpose sub-agent)
+Task: Author 5 original, hand-authored IELTS-style reading passages covering Stages 1 & 2 at src/lib/reading/passages-stage-1-2.ts.
+
+Work Log:
+- Read shared worklog (Tasks 1, 2-a, 2-b, 3, 11, 3-9, 2-6, grammar milestones) to align with the original-content policy and the existing reading architecture: ReadingPassage + ReadingQuestion types in src/lib/reading/types.ts, passages stored as static TS data, no DB migration.
+- Read /home/z/my-project/src/lib/reading/types.ts to confirm the ReadingPassage + ReadingQuestion interface (all required fields: id, slug, title, stage, difficulty, topic, estimatedReadingMinutes, passage, intro, skillFocus, questions[], relatedVocabIds?, relatedGrammarLessonIds?, estimatedMinutes, version, status="published"; question fields: id, type, prompt, options?, answer, acceptable?, explanation, evidence, paragraphRef?). Did NOT modify types.ts.
+- Read /home/z/my-project/reading-vocab-ref.json (categories + word ids — 1106 words across 32 categories) and /home/z/my-project/reading-grammar-ref.json (32 lessons) to confirm the existing vocab word ids and grammar lesson ids I would link to actually exist.
+- Authored 5 original passages by hand. Every passage body, intro, question prompt, options, answer, acceptable list, explanation, and evidence quote is original text written for this project. No content copied from Cambridge IELTS, Oxford, British Council, IELTS official materials, or any website. Topics were chosen to match the requested categories (Environment / Technology / Education for Stage 1; Health / Society for Stage 2); the wording is entirely my own.
+
+Passage 1 — r-s1-env (slug: recycling-at-home-small-habits-big-impact) — "Recycling at Home: Small Habits, Big Impact"
+- Stage 1 / beginner / Environment / ~184 words / 3 paragraphs / est. 5 min total (reading 2 min).
+- Skill: identifying the main idea and finding key information in a short text.
+- Questions (3): q1 mc (main idea), q2 mc (why rinse food containers), q3 short-answer (what to remove from glass bottles → "lids", with acceptable alternatives "the lids"/"their lids"/"lids removed"/"the lids of the bottles").
+- Evidence verified as exact substring of the passage body (e.g. "Recycling is one of the simplest ways that ordinary households can reduce their impact on the environment.", "Residents are usually asked to rinse out food containers before putting them in the bin, because leftover food can contaminate an entire load.", "glass bottles should have their lids removed.").
+- relatedVocabIds: ["recycle", "pollution", "sustainability"] (all in Environment category — verified in vocab ref).
+- relatedGrammarLessonIds: ["active-passive-voice"] (passage uses passive voice heavily — verified in grammar ref).
+
+Passage 2 — r-s1-tech (slug: the-smart-thermostat) — "The Smart Thermostat: A Small Device That Cuts Energy Bills"
+- Stage 1 / beginner / Technology / ~173 words / 3 paragraphs / est. 5 min total.
+- Skill: identifying the main idea and finding key information in a short text.
+- Questions (3): q1 mc (difference between smart and ordinary thermostat), q2 mc (how much families save on energy bills — 10–20%), q3 tfng (statement "Smart thermostats work perfectly even when the internet connection is unstable." → False; tfng options exactly ["True","False","Not Given"]).
+- Evidence verified exact substring (e.g. "A smart thermostat is a small electronic device that learns a household's daily routine and adjusts the heating and cooling automatically.", "Over a full year, families report saving between ten and twenty per cent on their energy bills.", "they need a steady internet connection to work at their best.").
+- relatedVocabIds: ["device", "innovation", "network"] (all in Technology category).
+- relatedGrammarLessonIds: ["relative-clauses", "comparatives-superlatives"] (passage uses relative clauses like "which only turns the system on or off" and comparatives like "less energy than", "Unlike an ordinary thermostat").
+
+Passage 3 — r-s1-edu (slug: spaced-repetition-a-smarter-way-to-remember) — "Spaced Repetition: A Smarter Way to Remember"
+- Stage 1 / beginner / Education / ~179 words / 3 paragraphs / est. 6 min total.
+- Skill: identifying the main idea and finding key information in a short text.
+- Questions (3): q1 mc (main idea), q2 sentence-completion mc-style ("a card that is answered correctly is shown ______" → "less often than before"), q3 short-answer ("what is the main requirement for spaced repetition?" → "patience", with acceptable alternatives).
+- Evidence verified exact substring (e.g. "Spaced repetition is a study method based on a simple idea: we remember information better when we review it at increasing intervals of time.", "A card answered correctly appears less often, while a difficult card returns sooner.", "The main requirement is patience: results build up over weeks rather than overnight.").
+- relatedVocabIds: ["education", "strategy", "approach"] (Education/Academic/Abstract categories).
+- relatedGrammarLessonIds: ["comparatives-superlatives"] (passage uses comparisons like "further into the future", "less often", "sooner").
+
+Passage 4 — r-s2-health (slug: the-ten-thousand-step-myth) — "The Ten Thousand Step Myth"
+- Stage 2 / intermediate / Health / ~278 words / 4 paragraphs (labelled A–D) / est. 8 min total (reading 3 min).
+- Skill: skimming, scanning, paraphrase recognition, and locating supporting evidence.
+- Questions (4): q1 mc (where the 10,000-step figure came from — Japanese pedometer), q2 tfng (statement "The original ten thousand step figure was based on careful medical research." → False), q3 sentence-completion ("risk of dying early falls most sharply as daily steps rise from two thousand to about ______" → "seven thousand"), q4 short-answer (three things improved by a short walk after meals → "blood pressure, sleep quality, and mood" with acceptable alternatives handling "and" vs comma).
+- Evidence verified exact substring (e.g. "The number first became popular in the 1960s, when a Japanese company sold a pedometer whose name, loosely translated, meant ten thousand steps meter.", "The figure was memorable, but it was not based on medical research.", "the risk of dying early falls sharply as daily steps rise from two thousand to about seven thousand.", "Even this modest change, repeated daily, can measurably improve blood pressure, sleep quality, and mood within a few weeks.").
+- relatedVocabIds: ["prevention", "treatment", "survive"] (all in Health category).
+- relatedGrammarLessonIds: ["comparatives-superlatives", "t1-data-comparisons"] (passage uses comparatives like "falls sharply", "more slowly", "biggest gains"; also discusses data from a 2023 review across 20 countries).
+
+Passage 5 — r-s2-society (slug: the-quiet-return-to-small-towns) — "The Quiet Return to Small Towns"
+- Stage 2 / intermediate / Society / ~280 words / 4 paragraphs (labelled A–D) / est. 8 min total.
+- Skill: skimming, scanning, paraphrase recognition, and locating supporting evidence.
+- Questions (4): q1 mc (recent change in migration patterns — city dwellers leaving for small towns/rural areas), q2 tfng (statement "Remote work played no role in encouraging people to leave large cities." → False), q3 matching-info ("The arrival of wealthier newcomers can make housing too expensive for long-term residents." → "Paragraph C"; options = ["Paragraph A","Paragraph B","Paragraph C","Paragraph D"]), q4 short-answer ("What did demographers assume about the rural-to-city trend?" → "it would simply continue" with acceptable alternatives).
+- Evidence verified exact substring (e.g. "A small but growing number of city dwellers are leaving large metropolises and settling in smaller towns and rural areas.", "The shift became much more visible after 2020, when remote work allowed office employees to do their jobs from anywhere with a reliable internet connection.", "the sudden arrival of wealthier newcomers can price long-term residents out of the rental market and put pressure on services such as schools and health clinics, which were planned for a smaller population.", "demographers assumed the trend would simply continue.").
+- relatedVocabIds: ["migration", "urban", "rural", "community"] (all in Society category).
+- relatedGrammarLessonIds: ["compound-complex-sentences", "t2-cause-effect"] (passage uses many compound-complex sentences and cause-effect constructions like "high housing costs... are pushing many residents away", "remote work allowed office employees to do their jobs from anywhere").
+
+File format: matches the requested signature exactly — `import type { ReadingPassage } from "./types";`, originality header comment, `export const stage12Passages: ReadingPassage[] = [...]`, `export const stage12PassageCount = stage12Passages.length;`. Double quotes for strings; apostrophes escaped as \' (e.g. "household\'s", "home\'s", "writer\'s", "household\'s routine"). Paragraphs separated by "\n\n" inside a single passage string. Stage-2 passages use "Paragraph A:" / "Paragraph B:" / "Paragraph C:" / "Paragraph D:" inline labels so paragraph splitting on "\n\n" yields 4 clean paragraphs.
+
+Validation:
+- `npx tsc --noEmit --skipLibCheck src/lib/reading/passages-stage-1-2.ts` → clean (0 errors, 0 warnings).
+- Custom Node validation script (`node --experimental-strip-types`) verified ALL CHECKS PASSED with 0 problems:
+  - stage12PassageCount === 5 === array length.
+  - Every passage has all 14 required ReadingPassage fields populated; stage in {1,2}; difficulty in {beginner, intermediate}; status === "published"; version === 1.
+  - Every question has all 6 required ReadingQuestion fields (id, type, prompt, answer, explanation, evidence) populated; paragraphRef present on all 17 questions.
+  - Question-type signatures per spec:
+    - r-s1-env: mc, mc, short-answer (2 mc + 1 short-answer) ✓
+    - r-s1-tech: mc, mc, tfng (2 mc + 1 tfng) ✓
+    - r-s1-edu: mc, sentence-completion, short-answer (1 mc + 1 sentence-completion + 1 short-answer) ✓
+    - r-s2-health: mc, sentence-completion, short-answer, tfng (1 mc + 1 tfng + 1 sentence-completion + 1 short-answer) ✓
+    - r-s2-society: matching-info, mc, short-answer, tfng (1 mc + 1 tfng + 1 matching-info + 1 short-answer) ✓
+  - tfng options exactly ["True","False","Not Given"] on both tfng questions; tfng answers in {True,False,Not Given} (both False here, supported by direct contradiction in the passage).
+  - matching-info q3 (r-s2-society) options = ["Paragraph A","Paragraph B","Paragraph C","Paragraph D"]; answer = "Paragraph C" (matches options).
+  - mc / sentence-completion answers are all present in their respective options arrays.
+  - short-answer questions all carry an `acceptable` array of alternative forms (e.g. q3 of env accepts "the lids"/"their lids"/"lids removed"/"the lids of the bottles"; q4 of health accepts both "and" + comma variants + reordered form).
+  - Evidence EXACT-substring check (whitespace-normalised): every one of the 17 questions' `evidence` field is a verbatim substring of its passage body — 17/17 pass. This is the critical teaching-value check.
+  - All 16 relatedVocabIds verified to exist in reading-vocab-ref.json (no orphan links).
+  - All 8 relatedGrammarLessonIds verified to exist in reading-grammar-ref.json (no orphan links).
+  - Passage word counts: Stage 1 = 184 / 173 / 179 (all in the 150–200 ballpark); Stage 2 = 278 / 280 (both in the 250–300 ballpark). Paragraph counts: Stage 1 = 3 paragraphs each; Stage 2 = 4 paragraphs each (A–D).
+  - 5 unique passage ids, 17 unique question ids (no collisions).
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/reading/passages-stage-1-2.ts (~370 lines, 5 passages, 17 questions).
+- Exports ready for downstream wiring: `stage12Passages` (ReadingPassage[]) and `stage12PassageCount` (= 5). Pattern matches the existing vocab/grammar batch-file convention — a downstream consumer (e.g. a future reading index/data.ts that concatenates stage12Passages + future stage-3-4-5 batches, or the reading-view.tsx) can `import { stage12Passages } from "./passages-stage-1-2";` and surface them under the Stage 1 + Stage 2 groupings.
+- Did NOT modify types.ts, vocab sample-data files, grammar lessons files, or any other file. Only created passages-stage-1-2.ts and appended this worklog section.
+- Original content only; no copyrighted material; CEFR labels are best estimates aligned to the beginner (Stage 1) / intermediate (Stage 2) targets.
+
+---
+Task ID: 3-b
+Agent: reading-author-stage-3-5 (general-purpose sub-agent)
+Task: Author 5 original, hand-authored IELTS-style reading passages covering Stages 3, 4 & 5 at src/lib/reading/passages-stage-3-5.ts.
+
+Work Log:
+- Read shared worklog (Tasks 1, 2-a, 2-b, 3, 11, 3-9, 2-6, grammar milestones, 3-a) to align with the original-content policy and the existing reading architecture: ReadingPassage + ReadingQuestion types in src/lib/reading/types.ts (DO NOT modify), passages stored as static TS data, no DB migration. Confirmed task 3-a completed passages-stage-1-2.ts (5 passages, 17 questions) so my passage/question IDs must not collide with r-s1-* / r-s2-* / r-s1env-q* / etc.
+- Read /home/z/my-project/src/lib/reading/types.ts to confirm the ReadingPassage + ReadingQuestion interface (required passage fields: id, slug, title, stage, difficulty, topic, estimatedReadingMinutes, passage, intro, skillFocus, questions[], relatedVocabIds?, relatedGrammarLessonIds?, estimatedMinutes, version, status="published"; question fields: id, type, prompt, options?, answer, acceptable?, explanation, evidence, paragraphRef?). Did NOT modify types.ts.
+- Read /home/z/my-project/src/lib/reading/passages-stage-1-2.ts to align with the established style: double-quoted strings, apostrophes escaped as \', passage text split across lines via `+` concatenation with each paragraph ending in `\n\n" +`, Stage 2 paragraphs labelled "Paragraph A:" inline, tfng prompts prefixed "Statement: ", tfng/ynng short-form acceptable alternatives ["T"]/["F"]/["N"]/etc., `// -----` separator comments between passages, `paragraphRef: "Paragraph X"` on every question. Followed all of these conventions.
+- Read /home/z/my-project/reading-vocab-ref.json (1106 words across 32 categories) and /home/z/my-project/reading-grammar-ref.json (32 lessons) to confirm the existing vocab word ids and grammar lesson ids I would link to actually exist. Cross-checked each chosen id against the actual vocab data files in src/lib/vocab/ to confirm the headword ids (`renewable`, `emission`, `conservation`, `sustainability`, `algorithm`, `innovation`, `deploy`, `device`, `migration`, `urban`, `poverty`, `diversity`, `pedagogy`, `curriculum`, `assessment`, `literacy`, `prevention`, `nutrition`, `chronic`) and the grammar lesson ids (`compound-complex-sentences`, `t2-cause-effect`, `active-passive-voice`, `t2-hedging`, `t2-concession`, `relative-clauses`, `t2-parallelism`, `conditionals`) all resolve to real entries.
+- Authored 5 original passages by hand. Every passage body, intro, question prompt, options, answer, acceptable list, explanation, and evidence quote is original text written for this project. No content copied from Cambridge IELTS, Oxford, British Council, IELTS official materials, or any website. Topics (island solar microgrids, warehouse robotics & reskilling, remote work & cities, inquiry vs direct instruction, sugar taxes) were chosen to match the requested categories (Environment / Technology / Society / Education / Health); the wording, examples, arguments, and figures are entirely my own.
+
+Passage 1 — r-s3-env (slug: island-solar-microgrids-and-the-end-of-diesel) — "Island Solar Microgrids and the End of Diesel"
+- Stage 3 / intermediate / Environment / 344 words / 5 paragraphs (labelled A–E) / est. 8 min total (reading 2 min).
+- Skill: practising four core IELTS question types — multiple choice, True/False/Not Given, matching headings, and sentence completion — within a single passage.
+- Questions (4): q1 mc (main advantage of a solar microgrid over diesel — "can continue operating when the undersea cable to a larger grid is severed"), q2 tfng ("Statement: Diesel fuel for the island generators was transported across hundreds of kilometres of open sea." → True; acceptable ["T"]), q3 matching-headings ("Which heading best fits Paragraph C?" → "Engineering challenges of building resilient microgrids"; 4 heading options), q4 sentence-completion ("adaptation need not wait for __________" → "perfect technology"; 4 options).
+- Evidence verified as exact substring of the passage body (e.g. "Because the energy is produced locally, no shipping is required, and the system can keep running even when a storm severs the undersea cable to a larger network.", "For decades, small island communities have relied on diesel generators for electricity, burning fuel shipped across hundreds of kilometres of open sea.", "Salt air corrodes metal frames, and hurricane-force winds can shatter a poorly anchored array within minutes. Engineers therefore design microgrids with reinforced mounts, raised platforms, and modular panels that can be replaced one at a time after a storm.", "The lesson, planners say, is that adaptation need not wait for perfect technology; it can begin with the tools already at hand.").
+- relatedVocabIds: ["renewable", "emission", "conservation", "sustainability"] (Environment category — verified in vocab ref + sample-data-extra-a.ts).
+- relatedGrammarLessonIds: ["compound-complex-sentences", "t2-cause-effect"] (passage uses many compound-complex sentences and cause-effect constructions like "leaving them exposed to the very emissions their power systems help create", "Because the energy is produced locally...").
+
+Passage 2 — r-s3-tech (slug: warehouse-robotics-and-the-reskilling-question) — "Warehouse Robotics and the Reskilling Question"
+- Stage 3 / intermediate / Technology / 354 words / 5 paragraphs (labelled A–E) / est. 8 min total.
+- Skill: combining multiple choice, True/False/Not Given, matching information, and sentence completion with paraphrase recognition.
+- Questions (4): q1 mc (effect of goods-to-person system — "produces more goods per hour than it did under the old arrangement"; paraphrases "Throughput has risen"), q2 tfng ("Statement: Employers prefer to recruit robotics technicians from outside the company because technical colleges supply a steady stream of suitable candidates." → True; paraphrases "steadier pipeline" as "steady stream"), q3 matching-info ("In which paragraph does the writer note that concerns about machines replacing workers are not new?" → "Paragraph D"; options = ["Paragraph A".."Paragraph E"]), q4 sentence-completion ("workers who complete the new apprenticeship programmes earn roughly __________ more within two years" → "forty percent"; 4 percentage options).
+- Evidence verified exact substring (e.g. "Throughput has risen, because machines do not tire in the eighth hour of a shift.", "Employers typically recruit robotics technicians from outside rather than upgrading their pickers, on the grounds that technical colleges produce a steadier pipeline.", "They note that fears of mass unemployment have accompanied every wave of mechanisation since the nineteenth century, and that each time the labour market has eventually absorbed the displaced workers.", "Early reports suggest that workers who complete these programmes earn roughly forty percent more within two years, and that turnover falls markedly.").
+- relatedVocabIds: ["algorithm", "innovation", "deploy", "device"] (Technology category).
+- relatedGrammarLessonIds: ["active-passive-voice", "t2-hedging"] (passage uses passive voice like "the shelves come to them", "a share of maintenance jobs to be filled", and hedged academic claims like "the labour market has eventually absorbed").
+
+Passage 3 — r-s4-society (slug: remote-work-and-the-reshaping-of-cities) — "Remote Work and the Reshaping of Cities"
+- Stage 4 / advanced / Society / 428 words / 5 paragraphs (labelled A–E) / est. 12 min total (reading 3 min).
+- Skill: inference and writer's views — distinguishing what the writer claims from what is merely true in the world.
+- Questions (5): q1 mc (writer's main purpose in Paragraph A — "to describe how the daily commute shaped the wealth of twentieth-century cities"), q2 ynng ("Statement: The writer claims that property prices in city centres have risen sharply since the spread of remote work." → No; the writer states prices have "softened"; explanation explicitly notes ynng reflects the writer's view, not external fact-checking), q3 ynng ("Statement: The writer believes that governments have done enough to address the inequalities created by remote work." → No; the writer argues few governments have been willing to attempt redistribution), q4 sentence-completion ("the question is not whether decentralisation causes disruption but whether __________" → "the net effect, measured over a generation, is finally beneficial"), q5 short-answer (name ONE type of worker whose livelihood depended on office footfall → "cleaners", with acceptable alternatives "cleaner"/"security staff"/"security guard"/"food vendor"/"food vendors").
+- Evidence verified exact substring (e.g. "The arrangement concentrated wealth and opportunity in a few square kilometres of pavement, leaving the periphery to depend on its spill-over.", "Property prices in city centres have softened, while once-quiet towns on the rail periphery have seen double-digit increases in demand for family homes.", "Resolving that tension will require more than infrastructure; it will require a deliberate politics of redistribution that few governments have so far been willing to attempt.", "The argument, in their view, is not whether decentralisation causes disruption — it plainly does — but whether the net effect, measured over a generation, is finally beneficial.", "The cleaners, security staff, and food vendors whose livelihoods depended on office footfall were not, for the most part, able to follow the work to the suburbs; their jobs vanished with the lunch hour.").
+- Both ynng explanations explicitly note that the answer reflects the writer's view/claim (per spec), e.g. "As with all ynng items, this reflects the writer's stated view, not an independent judgement of what governments have actually done."
+- relatedVocabIds: ["migration", "urban", "poverty", "diversity"] (Society category).
+- relatedGrammarLessonIds: ["compound-complex-sentences", "t2-concession"] (passage uses compound-complex sentences and concession structures like "Proponents argue, however, that the gains are being overlooked", "it plainly does — but whether the net effect...").
+
+Passage 4 — r-s4-edu (slug: inquiry-learning-and-the-evidence-question) — "Inquiry Learning and the Evidence Question"
+- Stage 4 / advanced / Education / 448 words / 5 paragraphs (labelled A–E) / est. 12 min total.
+- Skill: advanced inference — attributing claims correctly and reading for the writer's stance.
+- Questions (5): q1 mc (cognitive scientists' reason inquiry may fail with beginners — "working memory is too narrow to explore an unfamiliar problem and hold new facts in mind at the same time"), q2 ynng ("Statement: The writer claims that controlled studies have shown direct instruction to be more effective than inquiry learning for short-term learning in mathematics and science classrooms." → Yes; the writer presents this as the established finding of empirical research), q3 ynng ("Statement: The writer argues that inquiry-based learning should never be used in any classroom." → No; the writer argues inquiry "is best reserved for learners who already possess the background knowledge"), q4 matching-info ("In which paragraph does the writer suggest that the choice between teaching methods reflects deeper values about the kind of citizen a school should produce?" → "Paragraph D"), q5 short-answer ("what specific term do cognitive scientists use for the human mental capacity that they say is too narrow in beginners?" → "working memory", acceptable ["human working memory"]).
+- Evidence verified exact substring (e.g. "the human working memory is narrow: a beginner who must simultaneously explore an unfamiliar problem and hold new facts in mind often becomes overwhelmed, and learning stalls.", "Controlled studies comparing the two methods in mathematics and science classrooms have repeatedly found that novices learn more, and more quickly, when new content is explicitly taught and then practised with feedback.", "Inquiry, in this view, is best reserved for learners who already possess the background knowledge to interpret what they find.", "They point, too, to the social values embedded in each method: a classroom that hands authority to the learner, in their telling, is a rehearsal for democratic citizenship, whereas one that hands it to the teacher trains obedience.").
+- Both ynng explanations explicitly note the answer reflects the writer's claim/view, e.g. "As with all ynng items, the answer reflects the writer's claim, not an independent re-running of the studies."
+- relatedVocabIds: ["pedagogy", "curriculum", "assessment", "literacy"] (Education category).
+- relatedGrammarLessonIds: ["relative-clauses", "t2-parallelism"] (passage uses relative clauses like "a novice who must first be shown the path", "the social values embedded in each method", and parallel structures like "one treats the learner as... the other as a novice who...").
+
+Passage 5 — r-s5-health (slug: sugar-taxes-and-the-limits-of-pricing) — "Sugar Taxes and the Limits of Pricing"
+- Stage 5 / advanced / Health / 434 words / 5 paragraphs (labelled A–E) / est. 13 min total (timed mixed practice).
+- Skill: timed mixed practice — switching fluently between five IELTS question types under time pressure.
+- Questions (5, all five different types): q1 mc (why consumed-sugar volume fell by less than sold-drink volume — "Manufacturers reduced the sugar content of their drinks so that they fell below the tax threshold"), q2 tfng ("Statement: The 2014 sugar tax applied to beverages containing more than five grams of added sugar per hundred millilitres." → True), q3 ynng ("Statement: The writer claims that a sugar tax, on its own, is sufficient to reshape the food environment in which the market operates." → No; the writer states the opposite — "it cannot, by itself, reshape the food environment"), q4 sentence-completion ("early evaluations of the policy are bound to __________ its long-term effects" → "understate"), q5 short-answer (give ONE example other than a sugar tax of a measure the writer says should form part of a wider package → "clearer labelling", with acceptable alternatives covering all three examples in the passage: front-of-pack labelling / restrictions on advertising / subsidies for fresh fruit).
+- Evidence verified exact substring (e.g. "Brands quietly reduced the sugar content of popular cola lines to sit just below the tax threshold, allowing them to keep their old prices and their old customers.", "The measure targeted beverages containing more than five grams of added sugar per hundred millilitres, levying a charge that producers passed directly to shoppers.", "A tax on its own can nudge the market; it cannot, by itself, reshape the food environment in which the market operates.", "They add that pricing signals need time to change taste preferences that have taken decades to form, and that early evaluations of the tax are bound to understate its long-term effects.", "They are most effective when they form part of a wider package: clearer labelling on the front of packaging, restrictions on the advertising of sweets to children, and subsidies that make fresh fruit cheaper than confectionery in low-income neighbourhoods.").
+- The ynng explanation explicitly notes the answer reflects the writer's claim, e.g. "As with all ynng items, the answer reflects the writer's claim, not an independent assessment of whether a sugar tax could in principle reshape food environments."
+- relatedVocabIds: ["prevention", "nutrition", "chronic"] (Health category).
+- relatedGrammarLessonIds: ["conditionals", "t2-cause-effect"] (passage uses conditionals like "When a small European country introduced...", "Even where the tax does shift consumption..." and cause-effect constructions like "a sharp rise in shelf price would persuade consumers to switch").
+
+File format: matches the requested signature exactly — `import type { ReadingPassage } from "./types";`, originality header comment, `export const stage35Passages: ReadingPassage[] = [...]`, `export const stage35PassageCount = stage35Passages.length;`. Double quotes for strings; apostrophes escaped as \' (e.g. "today\'s batteries", "writer\'s own view", "learner\'s development"). Paragraphs separated by "\n\n" inside a single passage string built via `+` concatenation, mirroring the stage-1-2 file's style. All five passages use "Paragraph A:" / "Paragraph B:" / "Paragraph C:" / "Paragraph D:" / "Paragraph E:" inline labels so paragraph splitting on "\n\n" yields 5 clean paragraphs.
+
+Validation:
+- `npx tsc --noEmit --strict src/lib/reading/passages-stage-3-5.ts` → clean (0 errors, 0 warnings).
+- `npx eslint src/lib/reading/passages-stage-3-5.ts` → clean (0 errors, 0 warnings).
+- Custom Node validation script (`node --experimental-strip-types`) verified ALL CHECKS PASSED with 0 problems:
+  - stage35PassageCount === 5 === array length.
+  - Every passage has all 16 required ReadingPassage fields populated; stage in {3,4,5}; difficulty in {intermediate, advanced}; status === "published"; version === 1; stage-3 passages are "intermediate"; stage-4 and stage-5 passages are "advanced".
+  - Every question has all 6 required ReadingQuestion fields (id, type, prompt, answer, explanation, evidence) populated; paragraphRef present on all 23 questions.
+  - Question-type signatures per spec (all match exactly):
+    - r-s3-env: mc + tfng + matching-headings + sentence-completion ✓
+    - r-s3-tech: mc + tfng + matching-info + sentence-completion ✓
+    - r-s4-society: mc + 2 ynng + sentence-completion + short-answer ✓
+    - r-s4-edu: mc + 2 ynng + matching-info + short-answer ✓
+    - r-s5-health: mc + tfng + ynng + sentence-completion + short-answer (5 different types) ✓
+  - tfng options exactly ["True","False","Not Given"] on all 3 tfng questions; tfng answers in {True,False,Not Given} (True, True, True — all directly confirmed by the passage text).
+  - ynng options exactly ["Yes","No","Not Given"] on all 5 ynng questions; ynng answers in {Yes,No,Not Given} (No ×4, Yes ×1); every ynng explanation references the writer's view/claim/stance (programmatic check confirms the word "writer" appears in each).
+  - matching-headings (r-s3-env q3): prompt explicitly asks "Which heading best fits Paragraph C?"; 4 heading options; answer "Engineering challenges of building resilient microgrids" is one of the options.
+  - matching-info (r-s3-tech q3 + r-s4-edu q4): options = ["Paragraph A".."Paragraph E"] (5 labels each); answers "Paragraph D" and "Paragraph D" respectively (both in their options).
+  - mc / sentence-completion answers are all present in their respective options arrays.
+  - short-answer questions have NO `options` field (correct per spec); all carry an `acceptable` array of alternative forms.
+  - Evidence EXACT-substring check (case-sensitive, no normalisation): every one of the 23 questions' `evidence` field is a verbatim substring of its passage body — 23/23 pass. This is the critical teaching-value check.
+  - All 17 relatedVocabIds verified to exist in reading-vocab-ref.json AND in the actual vocab data files (no orphan links; counts: env 4, tech 4, society 4, edu 4, health 3 — all in the 2–4 range).
+  - All 9 relatedGrammarLessonIds verified to exist in reading-grammar-ref.json (no orphan links; counts: env 2, tech 2, society 2, edu 2, health 2 — all in the 1–2 range).
+  - Passage word counts: Stage 3 = 344 / 354 (target ~300–350 ✓); Stage 4 = 428 / 448 (target ~400–450 ✓); Stage 5 = 434 (target ~400–500 ✓). All five passages have exactly 5 paragraphs (A–E).
+  - 5 unique passage ids, 23 unique question ids (no internal collisions; no collisions with stage-1-2 ids r-s1-* / r-s2-* / r-s1env-q* etc.).
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/reading/passages-stage-3-5.ts (~570 lines, 5 passages, 23 questions).
+- Exports ready for downstream wiring: `stage35Passages` (ReadingPassage[]) and `stage35PassageCount` (= 5). Pattern matches the existing `stage12Passages` module — a downstream consumer can `import { stage35Passages } from "./passages-stage-3-5";` and merge with `stage12Passages` to surface all 10 passages across Stages 1–5 in the reading tab. The existing `readingStageLabels` / `readingStageSkills` maps in types.ts already advertise "Stage 3 — IELTS question types", "Stage 4 — Inference & writer's views", "Stage 5 — Timed mixed practice".
+- Did NOT modify types.ts, passages-stage-1-2.ts, vocab sample-data files, grammar lessons files, or any other file. Only created passages-stage-3-5.ts and appended this worklog section.
+- Original content only; no copyrighted material; difficulty labels aligned to the intermediate (Stage 3) / advanced (Stages 4–5) targets.
+
+---
+Task ID: reading-module
+Agent: main (orchestrator)
+Task: IELTS Reading Practice module — complete implementation.
+
+Work Log:
+- Data model (src/lib/reading/types.ts): ReadingPassage + ReadingQuestion types with all fields per spec §2 (id, slug, title, stage, difficulty, topic, estimatedReadingMinutes, passage, intro, skillFocus, questions, relatedVocabIds, relatedGrammarLessonIds, estimatedMinutes, version, status). 7 question types: mc, tfng, ynng, matching-headings, matching-info, sentence-completion, short-answer.
+- Authored 10 original passages (40 questions) via 2 parallel subagents: Stages 1-2 (5 passages, 17 Qs) + Stages 3-5 (5 passages, 23 Qs). All evidence verified as exact substrings of passage text (0 failures). All question types covered across stages.
+- Answer evaluator (src/lib/reading/evaluate.ts): deterministic, normalised, accepts alternatives.
+- Store extension: added reading slice (readingPassages, readingAttempts) + actions (recordReadingAttempt, completeReadingPassage) to vocab-store. Extended RemoteProgressBlob + partialize + loadRemoteState/exportRemoteState + resets. Updated use-progress-sync dependency array. Reading progress persists locally (guest) and syncs via existing blob (auth users) — zero new API, zero DB migration.
+- Reading UI (src/components/reading/reading-view.tsx): stage-grouped home with progress summary (passages/completed/accuracy/attempts + accuracy-by-question-type chart), search + stage filter, passage cards with completion + accuracy badges. Passage view: skill-focus intro, passage text with paragraph rendering, key-vocabulary card (linked to existing word bank), related-grammar card (clickable → switches to Grammar tab), questions with MC auto-check + short-answer Check button, immediate feedback with explanation + evidence quote, Submit & save flow.
+- Wired "Reading" tab into vocab-app shell (visible to all users, guest + auth). Cross-tab grammar linking (passage → Grammar lesson).
+- Fixed MC auto-check state race (same pattern as grammar: pass value directly to check function).
+- Cleaned up temp ref files.
+
+Verification (Agent Browser):
+- Reading tab renders: 5 stages with passage cards, progress summary, accuracy-by-type chart.
+- Opened "Recycling at Home" (Stage 1): skill focus, passage text, key vocabulary (5 words with Bengali), related grammar (Active & Passive Voice link), 3 questions (2 MC + 1 short-answer).
+- Answered MC: correct option → emerald border + "Correct" + explanation + evidence quote. Answered 2nd MC + short-answer → all answered → "Submit & save" appeared.
+- Submitted: "You scored 2/3 (67%)" + "Back to passages". No runtime/console errors.
+- DB: 4 users, 3 progress, 1 api key (UNCHANGED). Vocab: 1106 (UNCHANGED). Grammar: 32 lessons (UNCHANGED).
+- Lint clean. tsc: only pre-existing auth.ts:44.
+
+Stage Summary:
+- IELTS Reading Practice module complete: 10 original passages, 40 questions, 5 progressive stages (beginner → advanced), 7 question types (mc/tfng/ynng/matching-headings/matching-info/sentence-completion/short-answer), immediate feedback with evidence, vocab + grammar integration, progress tracking (accuracy by type + difficulty), persistence + sync. No data loss, no regressions.

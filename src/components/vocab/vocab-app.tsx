@@ -29,6 +29,7 @@ import {
   ShieldCheck,
   GraduationCap,
   Sparkles,
+  BookOpenCheck,
 } from "lucide-react";
 import { DashboardView } from "./dashboard-view";
 import { LibraryView } from "./library-view";
@@ -38,6 +39,7 @@ import { RevisionView } from "./revision-view";
 import { AdminView } from "./admin-view";
 import { AiPracticeView } from "./ai-practice-view";
 import { GrammarView } from "@/components/grammar/grammar-view";
+import { ReadingView } from "@/components/reading/reading-view";
 import { AuthDialog } from "./auth-dialog";
 import { useWordBank } from "@/lib/vocab/hooks";
 import { primeVoices } from "@/lib/vocab/speech";
@@ -51,6 +53,7 @@ const BASE_TABS = [
   { id: "quizzes", label: "Quizzes", icon: Brain },
   { id: "revision", label: "Revision", icon: Star },
   { id: "grammar", label: "Grammar", icon: GraduationCap },
+  { id: "reading", label: "Reading", icon: BookOpenCheck },
 ] as const;
 
 export function VocabApp() {
@@ -183,6 +186,14 @@ export function VocabApp() {
               onNavigate={setTab}
               pendingLessonId={pendingGrammarLesson}
               onConsumedPending={() => setPendingGrammarLesson(null)}
+            />
+          </TabsContent>
+          <TabsContent value="reading" className="mt-0">
+            <ReadingView
+              onOpenGrammar={(lessonId) => {
+                setPendingGrammarLesson(lessonId);
+                setTab("grammar");
+              }}
             />
           </TabsContent>
           {status === "authenticated" && (

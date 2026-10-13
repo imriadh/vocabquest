@@ -89,5 +89,7 @@ export function useProgressSync() {
     state.grammarLessons,
     state.grammarAttempts,
     state.grammarErrorCategories,
+    state.readingPassages,
+    state.readingAttempts,
   ]);
 }

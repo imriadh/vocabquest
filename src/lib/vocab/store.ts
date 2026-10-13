@@ -29,6 +29,22 @@ export interface GrammarAttempt {
   ts: number;
 }
 
+// ---- Reading progress (IELTS Reading Practice module) ----
+export interface ReadingAttempt {
+  passageId: string;
+  questionId: string;
+  questionType: string;
+  stage: number;
+  difficulty: string;
+  correct: boolean;
+  ts: number;
+}
+export interface ReadingPassageProgress {
+  completedAt: number;
+  accuracy: number; // 0..1
+  attempts: number;
+}
+
 export interface RemoteProgressBlob {
   customWords?: Word[];
   srs?: Record<string, SrsState>;
@@ -40,6 +56,9 @@ export interface RemoteProgressBlob {
   grammarLessons?: Record<string, GrammarLessonProgress>;
   grammarAttempts?: GrammarAttempt[];
   grammarErrorCategories?: Record<string, number>;
+  // reading slice
+  readingPassages?: Record<string, ReadingPassageProgress>;
+  readingAttempts?: ReadingAttempt[];
 }
 
 interface VocabState {
@@ -53,6 +72,9 @@ interface VocabState {
   grammarLessons: Record<string, GrammarLessonProgress>;
   grammarAttempts: GrammarAttempt[];
   grammarErrorCategories: Record<string, number>;
+  // reading slice
+  readingPassages: Record<string, ReadingPassageProgress>;
+  readingAttempts: ReadingAttempt[];
   hasHydrated: boolean;
 
   // actions
@@ -69,6 +91,9 @@ interface VocabState {
   // grammar actions
   recordGrammarAttempt: (a: Omit<GrammarAttempt, "ts">) => void;
   completeGrammarLesson: (lessonId: string, accuracy: number) => void;
+  // reading actions
+  recordReadingAttempt: (a: Omit<ReadingAttempt, "ts">) => void;
+  completeReadingPassage: (passageId: string, accuracy: number) => void;
   // remote progress sync (login/logout)
   loadRemoteState: (blob: RemoteProgressBlob) => void;
   exportRemoteState: () => RemoteProgressBlob;
@@ -86,6 +111,8 @@ export const useVocabStore = create<VocabState>()(
       grammarLessons: {},
       grammarAttempts: [],
       grammarErrorCategories: {},
+      readingPassages: {},
+      readingAttempts: [],
       hasHydrated: false,
 
       setHydrated: (v) => set({ hasHydrated: v }),
@@ -154,6 +181,8 @@ export const useVocabStore = create<VocabState>()(
           grammarLessons: {},
           grammarAttempts: [],
           grammarErrorCategories: {},
+          readingPassages: {},
+          readingAttempts: [],
         }),
 
       resetAll: () =>
@@ -167,6 +196,8 @@ export const useVocabStore = create<VocabState>()(
           grammarLessons: {},
           grammarAttempts: [],
           grammarErrorCategories: {},
+          readingPassages: {},
+          readingAttempts: [],
         }),
 
       recordGrammarAttempt: (a) => {
@@ -189,6 +220,22 @@ export const useVocabStore = create<VocabState>()(
         set({ grammarLessons: { ...get().grammarLessons, [lessonId]: next } });
       },
 
+      recordReadingAttempt: (a) => {
+        const attempt: ReadingAttempt = { ...a, ts: Date.now() };
+        const attempts = [...get().readingAttempts, attempt].slice(-1000);
+        set({ readingAttempts: attempts });
+      },
+
+      completeReadingPassage: (passageId, accuracy) => {
+        const prev = get().readingPassages[passageId];
+        const next: ReadingPassageProgress = {
+          completedAt: Date.now(),
+          accuracy,
+          attempts: (prev?.attempts ?? 0) + 1,
+        };
+        set({ readingPassages: { ...get().readingPassages, [passageId]: next } });
+      },
+
       loadRemoteState: (blob) => {
         // Replace local progress with the remote blob (called on login).
         set({
@@ -201,6 +248,8 @@ export const useVocabStore = create<VocabState>()(
           grammarLessons: blob.grammarLessons ?? {},
           grammarAttempts: blob.grammarAttempts ?? [],
           grammarErrorCategories: blob.grammarErrorCategories ?? {},
+          readingPassages: blob.readingPassages ?? {},
+          readingAttempts: blob.readingAttempts ?? [],
         });
       },
 
@@ -216,6 +265,8 @@ export const useVocabStore = create<VocabState>()(
           grammarLessons: s.grammarLessons,
           grammarAttempts: s.grammarAttempts,
           grammarErrorCategories: s.grammarErrorCategories,
+          readingPassages: s.readingPassages,
+          readingAttempts: s.readingAttempts,
         };
       },
     }),
@@ -232,6 +283,8 @@ export const useVocabStore = create<VocabState>()(
         grammarLessons: s.grammarLessons,
         grammarAttempts: s.grammarAttempts,
         grammarErrorCategories: s.grammarErrorCategories,
+        readingPassages: s.readingPassages,
+        readingAttempts: s.readingAttempts,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated(true);
