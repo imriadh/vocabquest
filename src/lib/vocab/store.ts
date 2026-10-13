@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { sampleWords, type Word } from "./sample-data";
+import { allSampleWords, type Word } from "./data";
 import { freshSrsState, review, type ReviewQuality, type SrsState, isDue } from "./srs";
 
 export type WordMark = "known" | "practice" | null;
@@ -13,6 +13,15 @@ export interface QuizResult {
   date: number;
   total: number;
   correct: number;
+}
+
+export interface RemoteProgressBlob {
+  customWords?: Word[];
+  srs?: Record<string, SrsState>;
+  manualMark?: Record<string, WordMark>;
+  difficult?: Record<string, boolean>;
+  quizHistory?: QuizResult[];
+  reviewLog?: { wordId: string; quality: ReviewQuality; ts: number }[];
 }
 
 interface VocabState {
@@ -35,6 +44,9 @@ interface VocabState {
   recordQuiz: (type: string, total: number, correct: number) => void;
   resetProgress: () => void;
   resetAll: () => void;
+  // remote progress sync (login/logout)
+  loadRemoteState: (blob: RemoteProgressBlob) => void;
+  exportRemoteState: () => RemoteProgressBlob;
 }
 
 export const useVocabStore = create<VocabState>()(
@@ -122,6 +134,30 @@ export const useVocabStore = create<VocabState>()(
           quizHistory: [],
           reviewLog: [],
         }),
+
+      loadRemoteState: (blob) => {
+        // Replace local progress with the remote blob (called on login).
+        set({
+          customWords: blob.customWords ?? [],
+          srs: blob.srs ?? {},
+          manualMark: blob.manualMark ?? {},
+          difficult: blob.difficult ?? {},
+          quizHistory: blob.quizHistory ?? [],
+          reviewLog: blob.reviewLog ?? [],
+        });
+      },
+
+      exportRemoteState: () => {
+        const s = get();
+        return {
+          customWords: s.customWords,
+          srs: s.srs,
+          manualMark: s.manualMark,
+          difficult: s.difficult,
+          quizHistory: s.quizHistory,
+          reviewLog: s.reviewLog,
+        };
+      },
     }),
     {
       name: "vocab-store-v1",
@@ -146,7 +182,7 @@ export const useVocabStore = create<VocabState>()(
 export function getAllWords(state: VocabState): Word[] {
   // Imported (custom) words take precedence over built-in words with the same id.
   const customIds = new Set(state.customWords.map((w) => w.id));
-  return [...state.customWords, ...sampleWords.filter((w) => !customIds.has(w.id))];
+  return [...state.customWords, ...allSampleWords.filter((w) => !customIds.has(w.id))];
 }
 
 export function getWordById(state: VocabState, id: string): Word | undefined {

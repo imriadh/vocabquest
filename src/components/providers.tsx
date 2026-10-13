@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/theme-provider";
+import { NextAuthSessionProvider } from "@/components/session-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [client] = useState(
@@ -10,7 +11,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: Infinity,
+            staleTime: 5 * 60 * 1000,
+            gcTime: 10 * 60 * 1000,
             refetchOnWindowFocus: false,
             retry: 1,
           },
@@ -20,7 +22,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-      <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      <NextAuthSessionProvider>
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      </NextAuthSessionProvider>
     </ThemeProvider>
   );
 }

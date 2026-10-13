@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sampleWords, type Difficulty, type Exam } from "@/lib/vocab/sample-data";
+import { allSampleWords, type Difficulty, type Exam } from "@/lib/vocab/data";
 
 const VALID_DIFFICULTIES: Difficulty[] = ["beginner", "intermediate", "advanced"];
 const VALID_EXAMS: Exam[] = ["IELTS", "TOEFL", "GRE", "SAT", "BCS", "Admission"];
@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   const category = searchParams.get("category");
   const limit = Number(searchParams.get("limit") ?? 0);
 
-  let words = sampleWords;
+  let words = allSampleWords;
 
   if (q) {
     words = words.filter(
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     count: limited.length,
-    total: sampleWords.length,
+    total: allSampleWords.length,
     words: limited,
   });
 }
