@@ -696,3 +696,26 @@ Stage Summary:
 - Curriculum now: 26 lessons, 104 exercises across Levels A/B/C. Level D (C1+) remains.
 - All content original; no copyrighted material; Bengali explanations included.
 - Reused existing engine + UI + store + sync — zero new architecture.
+
+---
+Task ID: grammar-milestone-3
+Agent: main (orchestrator)
+Task: IELTS Grammar Learning Module — Milestone 3 (progress & personalisation: diagnostics, recommendations, review queue, vocab bridge).
+
+Work Log:
+- Created src/lib/grammar/stats.ts with pure functions: getRecommendedLesson (priority: weak-topic review → next unfinished with prereqs met → next unfinished overall → oldest for retention), getReviewQueue (completed lessons < 70% accuracy), getStrongestTopics/getWeakestTopics (min 3 attempts, by accuracy), getAccuracyTrend (last N attempts), getTopicAccuracy, prereqsMet, relatedVocabCategories (maps grammar topic → vocab categories).
+- Enhanced grammar-view.tsx home: added "Recommended next" CTA card (prominent, primary-tinted, clickable → opens lesson), diagnostics grid (Review queue card with clickable low-accuracy lessons + Topic mastery card with Strongest + Needs work), accuracy-trend sparkline (last 14 attempts as green/red bars). Replaced the old simple weakest-topics card. All gated on hasHydrated + attempts existing.
+- Threaded onNavigate from vocab-app → GrammarView → LessonView so lessons can link to Library.
+- Added "Related vocabulary" card to lesson-view: uses useWordBank to show 4 words whose category matches relatedVocabCategories(lesson), with a "Browse all in Library" button that navigates to the Library tab. Bridges grammar ↔ vocab (e.g. Tense Choice lesson → surge/plateau/plummet/soar trend words).
+- Validation: lint clean; tsc only pre-existing auth.ts:44; no new deps; no DB changes.
+
+Verification (Agent Browser):
+- Grammar home: "Recommended next" CTA shows "Subject–Verb Agreement / Continue your learning path" (next unfinished lesson whose prereq met). Review queue, Topic mastery (Strongest/Needs work), Recent accuracy sparkline all render. Empty states correct when no data.
+- Opened "Tense Choice for Academic Task 1 Charts": "Related vocabulary" card shows 4 trend words (surge/plateau/plummet/soar) with Bengali + "Browse all in Library" button → clicking navigates to Library tab (verified selected).
+- Answered Subject-Verb Agreement exercises (4): Save & finish → returned home → Recent accuracy sparkline populated (10 bars: 8 green, 2 red); Topic mastery shows "Agreement" topic; Review queue correctly empty (80% ≥ 70% threshold).
+- No runtime errors. DB: 4 users, 3 with progress (UNCHANGED). Vocab: 1106 (UNCHANGED). Existing functionality preserved. (One pre-existing Zustand hydration warning, same pattern as vocab views — not introduced here.)
+
+Stage Summary:
+- Milestone 3 complete and verified: personalised grammar diagnostics (recommended next lesson driven by error frequency × topic importance + prerequisites, review queue for struggling lessons, strongest/weakest topic mastery, accuracy trend sparkline) + grammar↔vocabulary bridge (related words on lesson pages).
+- Curriculum: 26 lessons, 104 exercises (Levels A/B/C). Level D (C1+) remains.
+- Reused existing store + sync + UI — zero new architecture.

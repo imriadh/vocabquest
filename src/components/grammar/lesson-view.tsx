@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import {
   ArrowLeft,
+  ArrowRight,
   Check,
   X,
   Lightbulb,
@@ -21,7 +22,9 @@ import {
 } from "lucide-react";
 import type { GrammarLesson, GrammarExercise } from "@/lib/grammar/types";
 import { isAnswerCorrect, exerciseTypeLabel } from "@/lib/grammar/evaluate";
+import { relatedVocabCategories } from "@/lib/grammar/stats";
 import { useVocabStore } from "@/lib/vocab/store";
+import { useWordBank } from "@/lib/vocab/hooks";
 import { useToast } from "@/hooks/use-toast";
 import { BengaliText } from "@/components/vocab/ui-bits";
 import { cn } from "@/lib/utils";
@@ -29,9 +32,11 @@ import { cn } from "@/lib/utils";
 export function LessonView({
   lesson,
   onBack,
+  onOpenLibrary,
 }: {
   lesson: GrammarLesson;
   onBack: () => void;
+  onOpenLibrary?: () => void;
 }) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState<Record<string, boolean>>({});
@@ -42,6 +47,16 @@ export function LessonView({
   const allChecked = lesson.exercises.every((ex) => checked[ex.id] !== undefined);
   const correctCount = lesson.exercises.filter((ex) => checked[ex.id] === true).length;
   const progress = (Object.keys(checked).length / lesson.exercises.length) * 100;
+
+  // Related vocabulary — connects grammar to the word bank (Milestone 3).
+  const { words } = useWordBank();
+  const relatedWords = useMemo(() => {
+    const cats = relatedVocabCategories(lesson);
+    if (!cats.length) return [];
+    return words
+      .filter((w) => cats.includes(w.category))
+      .slice(0, 4);
+  }, [lesson, words]);
 
   function check(ex: GrammarExercise) {
     const learner = answers[ex.id] ?? "";
@@ -199,6 +214,35 @@ export function LessonView({
           )}
         </CardContent>
       </Card>
+
+      {/* Related vocabulary — bridge grammar ↔ word bank */}
+      {relatedWords.length > 0 && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <BookOpen className="h-4 w-4 text-primary" /> Related vocabulary
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-2 text-xs text-muted-foreground">
+              Useful words that appear with this grammar in IELTS contexts.
+            </p>
+            <ul className="space-y-1">
+              {relatedWords.map((w) => (
+                <li key={w.id} className="flex items-baseline justify-between gap-2 text-sm">
+                  <span className="font-medium">{w.word}</span>
+                  <BengaliText className="text-muted-foreground">{w.bengali}</BengaliText>
+                </li>
+              ))}
+            </ul>
+            {onOpenLibrary && (
+              <Button variant="outline" size="sm" className="mt-3 gap-1" onClick={onOpenLibrary}>
+                Browse all in Library <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Exercises */}
       <Card>

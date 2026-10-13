@@ -20,6 +20,9 @@ import {
   AlertTriangle,
   ArrowRight,
   GraduationCap,
+  Sparkles,
+  RotateCcw,
+  Trophy,
 } from "lucide-react";
 import {
   grammarLessons,
@@ -28,11 +31,18 @@ import {
 } from "@/lib/grammar/lessons-data";
 import type { GrammarLesson, GrammarLevel } from "@/lib/grammar/types";
 import { useVocabStore } from "@/lib/vocab/store";
+import {
+  getRecommendedLesson,
+  getReviewQueue,
+  getStrongestTopics,
+  getWeakestTopics,
+  getAccuracyTrend,
+} from "@/lib/grammar/stats";
 import { LessonView } from "./lesson-view";
 import { EmptyState } from "@/components/vocab/ui-bits";
 import { cn } from "@/lib/utils";
 
-export function GrammarView() {
+export function GrammarView({ onNavigate }: { onNavigate?: (tab: string) => void }) {
   const [query, setQuery] = useState("");
   const [level, setLevel] = useState("all");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -70,16 +80,36 @@ export function GrammarView() {
   const correctAttempts = grammarAttempts.filter((a) => a.correct).length;
   const accuracy = totalAttempts ? Math.round((correctAttempts / totalAttempts) * 100) : 0;
 
-  // Weakest topics (top 3 by error count).
-  const weakest = useMemo(() => {
-    return Object.entries(errorCategories)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 3)
-      .map(([topic, count]) => ({ topic, count }));
-  }, [errorCategories]);
+  // Personalised analytics (Milestone 3).
+  const recommended = useMemo(
+    () => getRecommendedLesson(grammarLessons, grammarLessonsState, grammarAttempts),
+    [grammarLessonsState, grammarAttempts]
+  );
+  const reviewQueue = useMemo(
+    () => getReviewQueue(grammarLessons, grammarLessonsState),
+    [grammarLessonsState]
+  );
+  const strongest = useMemo(
+    () => getStrongestTopics(grammarAttempts),
+    [grammarAttempts]
+  );
+  const weakest = useMemo(
+    () => getWeakestTopics(grammarAttempts),
+    [grammarAttempts]
+  );
+  const trend = useMemo(
+    () => getAccuracyTrend(grammarAttempts, 14),
+    [grammarAttempts]
+  );
 
   if (openLesson) {
-    return <LessonView lesson={openLesson} onBack={() => setOpenId(null)} />;
+    return (
+      <LessonView
+        lesson={openLesson}
+        onBack={() => setOpenId(null)}
+        onOpenLibrary={onNavigate ? () => onNavigate("library") : undefined}
+      />
+    );
   }
 
   const showPaths = !query && level === "all";
@@ -116,24 +146,143 @@ export function GrammarView() {
         />
       </div>
 
-      {/* Weakest topics */}
-      {weakest.length > 0 && (
+      {/* Recommended next lesson — the core learning-loop driver */}
+      {hasHydrated && recommended && (
+        <Card
+          className="cursor-pointer border-primary/40 bg-primary/5 transition-colors hover:bg-primary/10"
+          onClick={() => setOpenId(recommended.lesson.id)}
+        >
+          <CardContent className="flex items-center gap-3 p-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                Recommended next
+              </p>
+              <p className="truncate font-semibold leading-tight">
+                {recommended.lesson.title}
+              </p>
+              <p className="text-xs text-muted-foreground">{recommended.reason}</p>
+            </div>
+            <ArrowRight className="h-5 w-5 shrink-0 text-primary" />
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Diagnostics grid: review queue + strongest/weakest + trend */}
+      {hasHydrated && totalAttempts > 0 && (
+        <div className="grid gap-3 md:grid-cols-2">
+          {/* Review queue */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <RotateCcw className="h-4 w-4 text-amber-600" /> Review queue
+                {reviewQueue.length > 0 && (
+                  <Badge variant="secondary" className="tabular-nums">{reviewQueue.length}</Badge>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {reviewQueue.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Nothing to review right now. Lessons you score below 70% on will appear here.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {reviewQueue.slice(0, 4).map((r) => (
+                    <li
+                      key={r.lesson.id}
+                      className="flex cursor-pointer items-center justify-between gap-2 rounded-md border p-2 text-sm hover:bg-muted/50"
+                      onClick={() => setOpenId(r.lesson.id)}
+                    >
+                      <span className="min-w-0 truncate">{r.lesson.title}</span>
+                      <Badge variant="secondary" className="bg-amber-500/15 text-amber-700 tabular-nums dark:text-amber-300">
+                        {Math.round(r.accuracy * 100)}%
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Strongest + weakest topics */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Trophy className="h-4 w-4 text-emerald-600" /> Topic mastery
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Strongest
+                </p>
+                {strongest.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">
+                    Practise a few more exercises to see your strongest topics.
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {strongest.map((t) => (
+                      <Badge key={t.topic} variant="secondary" className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
+                        {t.topic} · {Math.round(t.accuracy * 100)}%
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div>
+                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Needs work
+                </p>
+                {weakest.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">
+                    No weak spots detected yet. Keep practising!
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {weakest.map((t) => (
+                      <Badge key={t.topic} variant="secondary" className="bg-rose-500/10 text-rose-700 dark:text-rose-300">
+                        {t.topic} · {Math.round(t.accuracy * 100)}%
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Accuracy trend sparkline */}
+      {hasHydrated && trend.length >= 3 && (
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
-              <AlertTriangle className="h-4 w-4 text-rose-600" /> Topics needing revision
+              <TrendingUp className="h-4 w-4 text-sky-600" /> Recent accuracy
+              <span className="text-xs font-normal text-muted-foreground">
+                last {trend.length} answers
+              </span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {weakest.map((w) => (
-                <Badge key={w.topic} variant="secondary" className="bg-rose-500/10 text-rose-700 dark:text-rose-300">
-                  {w.topic} ({w.count} errors)
-                </Badge>
+            <div className="flex h-12 items-end gap-1">
+              {trend.map((p, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "flex-1 rounded-sm",
+                    p.correct ? "bg-emerald-500/70" : "bg-rose-500/70"
+                  )}
+                  style={{ height: p.correct ? "100%" : "45%" }}
+                  title={p.correct ? "Correct" : "Incorrect"}
+                />
               ))}
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              These are the grammar areas where you make the most mistakes. Practise them to lift your writing accuracy.
+              Green bars are correct answers. A consistent run of green shows steady accuracy.
             </p>
           </CardContent>
         </Card>

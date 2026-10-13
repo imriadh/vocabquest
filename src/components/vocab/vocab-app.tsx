@@ -171,7 +171,7 @@ export function VocabApp() {
             <RevisionView />
           </TabsContent>
           <TabsContent value="grammar" className="mt-0">
-            <GrammarView />
+            <GrammarView onNavigate={setTab} />
           </TabsContent>
           {session?.user?.role === "ADMIN" && (
             <TabsContent value="admin" className="mt-0">
