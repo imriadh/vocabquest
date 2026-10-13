@@ -282,3 +282,158 @@ Stage Summary:
 - Enrichment: collocations + word family + common mistakes now visible to learners in Library + Flashcards.
 - Original content only; no copyrighted dictionary/example material copied.
 - Toward §18.1 target (1,500-2,500): 791/~1,500 lower bound. Next batches should add ~700+ more words; quality > count per §18.1.
+
+---
+Task ID: 2
+Agent: data-author-e (general-purpose sub-agent, batch E — IELTS Writing Task 1 + Task 2 argumentation)
+Task: Author an original 100-word IELTS-focused vocabulary batch at src/lib/vocab/sample-data-extra-e.ts using the ENRICHED schema (cefr, topic, collocations, wordFamily, commonMistake). Focus: IELTS Writing Task 1 Academic (trends, comparisons, proportions, processes, changes) + Writing Task 2 argumentation.
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 3, 4, 3-9) to align with the original-data architecture and the enriched `Word` interface (id/word/phonetic/partOfSpeech/bengali/definition/example/synonyms/antonyms/difficulty/exams/category + optional cefr/topic/collocations/wordFamily/commonMistake).
+- Read `/home/z/my-project/existing_headwords_791.txt` (791 deduplicated headwords from sample-data.ts + extra-a + extra-b + extra-c + extra-d) as the strict no-go set.
+- Carefully selected 100 headwords across 5 IELTS-functional categories, all verified absent from the 791 set (case-insensitive). One initial candidate (`encompass`) was found to duplicate an existing headword during pre-flight check; it was replaced with `subsume` before any file was written.
+- Authored 100 hand-written vocabulary entries — every definition, Bengali translation, IPA phonetic, example sentence, synonym, antonym, collocation, word-family form, and commonMistake written from scratch for this batch. No content was copied from any website, dictionary, textbook, or third-party dataset. Bengali uses proper Unicode Bengali script throughout (no romanisation); example sentences are original IELTS Task 1 (chart/process) and Task 2 (essay) style, and each genuinely uses its headword.
+- Apostrophes inside double-quoted strings are unescaped (valid JS), matching the convention used by batch D.
+- CEFR distribution (target: ~35% B2 / ~50% C1 / ~15% B1):
+  - B1: 15 (15.0%) — difficulty "beginner"
+  - B2: 36 (36.0%) — difficulty "intermediate"
+  - C1: 49 (49.0%) — difficulty "advanced"
+- Topic/category distribution (100 total):
+  - Functional: Trends — 30 words (crest, trough, apex, nadir, zenith, acme, rebound, recede, ebb, wane, taper, balloon, mushroom, contract, swell, inflate, deflate, nosedive, skyrocket, hover, stagnate, trail, backtrack, dip, topple, recoup, oscillate, seesaw, overtake, tumble)
+  - Functional: Comparison — 13 words (comparable, equivalent, parity, tantamount, outweigh, outnumber, supersede, surpass, eclipse, dwarf, overshadow, analogous, threefold)
+  - Functional: Proportion — 12 words (comprise, represent, subsume, proportion, proportional, disproportionate, fraction, plurality, quota, ratio, percentile, apportion)
+  - Functional: Process — 20 words (undergo, convert, synthesize, dispatch, refine, subsequent, preceding, sequential, transmit, transition, transmute, mutate, emit, expel, ingest, secrete, absorb, crystallize, condense, dismantle)
+  - Functional: Argument — 25 words (posit, postulate, aver, underscore, underline, reiterate, stipulate, propound, elucidate, expound, promulgate, opine, proffer, allude, counter, controvert, repudiate, disavow, decry, deplore, recant, reaffirm, accentuate, foreground, restate)
+- Exam tagging: every entry has IELTS (100/100); TOEFL on all 100; GRE on the 49 C1 academic words; SAT on the 49 C1 college-prep words; BCS and Admission on all 100 (broad academic coverage).
+- Field-completeness: every entry has non-empty bengali/definition/example, well-formed synonyms[]/antonyms[] arrays, IELTS-tagged exams, cefr set, topic set, and collocations with 2-4 entries each. wordFamily populated on every entry where a grammatically valid same-headword family exists (omitted only on a handful where no valid forms apply). commonMistake present on all 100 entries — each captures a genuine learner error (spelling, false collocation, register, stress shift, irregular past tense, etc.).
+- Verified with `npx tsc --noEmit --skipLibCheck src/lib/vocab/sample-data-extra-e.ts`: zero TypeScript errors.
+- Verified with a Node script (via `node --experimental-strip-types`):
+  - Total words: 100 (PASS, meets the 100-minimum spec)
+  - extraWordsE.length === extraWordsECount === 100
+  - Unique ids: 100 of 100 (no duplicates)
+  - Unique words: 100 of 100 (no duplicates, case-insensitive)
+  - Zero id collisions with the 791 existing headwords (case-insensitive)
+  - Zero word collisions (case-insensitive) with the 791 existing headwords
+  - Zero intra-batch duplicate ids and zero intra-batch duplicate words
+  - Every example sentence contains its headword (verified via toLowerCase().includes)
+  - Every Bengali field contains Bengali Unicode characters (range U+0980-U+09FF)
+  - Every entry tagged IELTS; difficulty-CEFR mapping matches the B1→beginner, B2→intermediate, C1→advanced rule (0 mismatches)
+  - Every collocations array has 2-4 entries (0 violations)
+  - No synonym array contains the headword itself
+  - All wordFamily arrays (where present) are valid string arrays
+- Pre-flight dup fixes during authoring (resolved before save):
+  - `encompass` (found in 791) → replaced with `subsume`
+  - 5 validation issues caught and fixed post-first-write:
+    - `inflate`: removed headword from synonyms array
+    - `overtake`: example rewritten to use the headword form (was using past tense "overtook")
+    - `undergo`: example rewritten to use the headword form (was using past tense "underwent")
+    - `synthesize`: example rewritten to use the headword's -ize spelling (was using British "synthesises")
+    - `crystallize`: example rewritten to use the headword's -ize spelling (was using British "crystallises")
+  - Final re-run: Issues found: 0 (PASS)
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/vocab/sample-data-extra-e.ts (~1,935 lines, 100 word entries with full IELTS enrichment, all original content).
+- Exports ready for downstream use: `extraWordsE` (Word[]) and `extraWordsECount` (= 100).
+- Did NOT touch sample-data.ts, sample-data-extra-a.ts, sample-data-extra-b.ts, sample-data-extra-c.ts, sample-data-extra-d.ts, data.ts, or any other project file. Only created sample-data-extra-e.ts and appended this worklog section. (A temporary validation script was created at /home/z/my-project/validate-extra-e.mts during the authoring process and removed after final validation passed.)
+- When a downstream consumer wires it in (e.g. data.ts merging sampleWords + extraWordsA + extraWordsB + extraWordsC + extraWordsD + extraWordsE, deduping by id/word as useWordBank already does), the word bank will offer 891 unique IELTS-focused entries (791 + 100), with batches C/D/E together providing 319 fully enriched-schema entries covering all 8 IELTS topic domains plus dedicated Task 1 trends/comparison/proportion/process and Task 2 argumentation functional language.
+- Toward §18.1 target (1,500-2,500): 891/~1,500 lower bound (60%). Batch E specifically addresses the IELTS Writing sub-skills gap (Task 1 trends/processes + Task 2 argumentation) that was previously under-represented in the corpus.
+
+---
+Task ID: 4
+Agent: data-enricher (general-purpose sub-agent, enrichment-map backfill)
+Task: Create a non-mutating enrichment map at src/lib/vocab/enrichment-map.ts that adds IELTS metadata (cefr, collocations, wordFamily, commonMistake) to ~150 of the HIGHEST-VALUE existing headwords from the original 572-entry collection. Backfill is keyed by stable word id so user SRS state (which keys off word id) is never disturbed — the existing data files are not edited, only this lookup map is created.
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 11, 4-batch-D, 3-batch-C, 3-9, 2-batch-E) to align with the original-data architecture, the enriched `Word` schema, and the existing batches A/B (572 un-enriched headwords) vs C/D/E (329 already-enriched new headwords).
+- Read `/home/z/my-project/backfill_candidates.json` (572 entries: `{id, word, partOfSpeech, definition, category}`) — these are the original 572 headwords from sample-data.ts + extra-a + extra-b. The task explicitly excludes batches C/D from this candidate set (they are already enriched).
+- Read `src/lib/vocab/sample-data.ts` to confirm the schema exports (`CefrLevel`, `WordFamily`) and the `Word` interface. Confirmed `CefrLevel = "A2" | "B1" | "B2" | "C1" | "C2"` and `WordFamily = { noun?, verb?, adjective?, adverb? }`.
+- Selected 155 of the most IELTS-valuable headwords from the 572 candidates, prioritizing: academic verbs (analyze, evaluate, demonstrate, establish, identify, illustrate, indicate, interpret, justify, maintain, obtain, propose, validate, refute, reinforce, substantiate, etc.); abstract nouns (concept, consequence, distinction, factor, perspective, phenomenon, principle, significance, strategy, paradigm, dichotomy, etc.); describing adjectives (comprehensive, considerable, crucial, effective, essential, evident, fundamental, gradual, inevitable, prominent, relevant, substantial, sufficient, systematic, etc.); discourse markers (accordingly, consequently, furthermore, hence, however, nevertheless, nonetheless, thereby, therefore, thus, whereas); and high-frequency topic words across the 8 IELTS domains (sustainability, conservation, deforestation, ecosystem, emission, biodiversity, curriculum, pedagogy, inflation, deficit, subsidy, expenditure, recession, epidemic, pandemic, innovation, integration, inequality, legislation, jurisdiction, amendment, treaty, etc.).
+- For each selected entry, consulted the existing `definition` and `partOfSpeech` in the candidates JSON so collocations are grammatically consistent with the headword's POS (e.g. `attribute` POS=verb → "attribute to", "attribute success to", "attribute a cause"; `approach` POS=noun → not selected because collocations would be more natural for verb form, etc.).
+- Authored 155 enrichment entries — every collocation, word-family form, and common-mistake observation was written from scratch for this task. No content was copied from any dictionary, textbook, or third-party dataset. Only genuine common-mistake observations are included (52 of 155 entries); the remaining 103 entries legitimately omit `commonMistake` because no genuine, common learner error was identifiable for that headword (per the spec: "do NOT invent").
+- Word families: only grammatically valid same-headword forms are listed (e.g. analyze → analysis/analytical/analytically; concept → conception/conceptual; consequence → consequential/consequently). 130 of 155 entries include a `wordFamily`; the remaining 25 legitimately omit it (discourse adverbs like "however", "therefore"; compounds like "outcome", "ecosystem", "biodiversity"; words with no clean same-headword family like "species", "treaty", "thesis", "deficit", "chronic").
+
+Verification (Node + tsc):
+- `npx tsc --noEmit --skipLibCheck src/lib/vocab/enrichment-map.ts`: zero TypeScript errors in the new file (only pre-existing unrelated errors in examples/, skills/, and src/lib/auth.ts remain — documented in prior audit).
+- Node validation script (via `node --experimental-strip-types`):
+  - `enrichmentMapCount === Object.keys(enrichmentMap).length === 155` (PASS — exports match runtime map size)
+  - Unique keys: 155 of 155 (no duplicate keys; Record<string, Enrichment> naturally dedupes)
+  - All 155 keys exist in `backfill_candidates.json` (0 missing) — every key is a verified existing word id; no invented ids
+  - Zero overlap with batch C (sample-data-extra-c.ts, 110 ids) and batch D (sample-data-extra-d.ts, 110 ids) — confirmed no double-enrichment (batches C/D are already enriched in their own files; my map only targets the 572 un-enriched originals)
+  - CEFR distribution: B1=1 (0.6%), B2=66 (42.6%), C1=80 (51.6%), C2=8 (5.2%) — skews B2/C1 per the IELTS Band 6.5-8.0 target. One B1 ("however") because it is genuinely B1-level. No A2 entries (none of these high-IELTS-value words are A2).
+  - Every entry has 2-4 collocations (0 violations of the count constraint)
+  - Every entry has at least one collocation that includes the headword (0 entries with no-headword-in-collocations) — confirms collocations are genuinely combos using the headword
+  - Field completeness: 155/155 have cefr+collocations; 130/155 have wordFamily; 52/155 have commonMistake (only genuine ones included; 103 entries legitimately omit per spec)
+  - Source POS distribution of selected entries: verb=60, noun=42, adjective=42, adverb=10, conjunction=1 — reflects the IELTS academic-verb + abstract-noun + describing-adjective + discourse skew
+  - Source category distribution: Academic 26, Abstract 41, Action 36, Communication 18, Environment 10, Economy 5, Education 4, Law 4, Society 3, Science 3, Health 3, Technology 1, Business 1 — reflects deliberate prioritization of academic/discourse/abstract words
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/vocab/enrichment-map.ts (~640 lines, 155 enrichment entries, all original content).
+- Exports ready for downstream use: `Enrichment` interface, `enrichmentMap` (Record<string, Enrichment>), and `enrichmentMapCount` (= 155).
+- Did NOT modify sample-data.ts, sample-data-extra-a.ts, sample-data-extra-b.ts, sample-data-extra-c.ts, sample-data-extra-d.ts, sample-data-extra-e.ts, data.ts, or any other project file. Only created enrichment-map.ts and appended this worklog section. This is a non-mutating backfill — the existing 572 entries are untouched.
+- When a downstream consumer wires it in (e.g. data.ts merging the existing batches and then applying `enrichmentMap[w.id]` to overlay cefr/collocations/wordFamily/commonMistake on the 155 targeted words), those 155 originally-unenriched headwords will instantly gain full IELTS metadata in the Library/Flashcards UI — without any risk to user SRS state (which keys off the stable word id, unchanged).
+- Reversibility: removing the import or stopping the overlay returns the system to its prior state with zero migration cost.
+- Original content only; no copyrighted dictionary/example material copied. Collocations reflect natural English usage authored from scratch.
+
+---
+Task ID: 3
+Agent: data-author-f (general-purpose sub-agent)
+Task: Author an original 100-word IELTS-focused vocabulary batch at src/lib/vocab/sample-data-extra-f.ts using the ENRICHED schema (cefr, topic, collocations, wordFamily, commonMistake). Focus: IELTS Writing Task 2 (causes/effects, solutions, advantages/disadvantages, evaluation) + Speaking Parts 1-3 functional language (personal experience, opinions, abstract discussion, qualifying, examples). Must not collide with the existing 791 headwords (sample-data.ts + extraWordsA + extraWordsB + extraWordsC + extraWordsD) nor with batch E coverage (trends/comparison/proportion/process + pure argumentation verbs).
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 11, 4, 3, 3-9) to align with the original-data architecture and the enriched `Word` interface exported from sample-data.ts (id, word, phonetic?, partOfSpeech?, bengali, definition, example, synonyms[], antonyms[], difficulty, exams[], category, cefr?, topic?, collocations?, wordFamily?, commonMistake?).
+- Read /home/z/my-project/existing_headwords_791.txt (791 headwords from sample-data.ts + extra-a + extra-b + extra-c + extra-d) as the strict no-go set when picking my 100 headwords. Additionally treated batch E's expected coverage (assert, contend, advocate, concede, reiterate, underscore, stipulate, aver, postulate, endorse, rebut + batch-C trends/comparison/proportion/process words) as a secondary exclusion set.
+- Authored 100 hand-written vocabulary entries — every definition, Bengali translation, IPA phonetic, example sentence, synonym, antonym, collocation, word-family note, and commonMistake observation written from scratch for this batch. No content copied from any website, dictionary, or third-party dataset. Bengali uses proper Unicode script (no romanization); example sentences genuinely use the headword/phrase and are IELTS Task 2 / Speaking-style natural answers. Strings use double quotes throughout; apostrophes used raw inside double-quoted strings (matches batch D precedent and the worked example in the spec).
+- Distribution (verified by Node script):
+  - Task 2 Causes & Effects: 30 (stem-from, arise, breed, spawn, engender, provoke, incite, kindle, ignite, unleash, catalyse, necessitate, ramification, repercussion, fallout, aftermath, by-product, spin-off, corollary, give-rise-to, bring-about, result-in, attributable, rooted-in, sow, flow-from, consequent, ensuing, give-impetus-to, invoke)
+  - Task 2 Solutions & Recommendations: 25 (curb, deter, forestall, pre-empt, spearhead, pioneer, foster, cultivate, nurture, incentivise, mandate, oblige, compel, facilitate, orchestrate, institute, promulgate, enact, oversee, supervise, uphold, embed, instil, impede, stifle)
+  - Task 2 Advantages/Disadvantages & Evaluation: 25 (upside, downside, snag, shortcoming, limitation, virtue, asset, boon, bane, outweigh, surpass, eclipse, dwarf, superior, inferior, negligible, nominal, trivial, striking, remarkable, pronounced, marginal, insignificant, inconsequential, noteworthy)
+  - Speaking Parts 1-3 functional language: 20 (tend-to, inclined-to, prone-to, fond-of, keen-on, passionate-about, to-some-extent, up-to-a-point, broadly-speaking, by-and-large, for-the-most-part, as-far-as-im-concerned, from-my-perspective, admittedly, granted, to-be-honest, frankly, as-a-rule, on-the-whole, generally-speaking)
+- CEFR distribution (target ~20% B1 / ~35% B2 / ~45% C1): B1 = 20 (20.0%) / B2 = 37 (37.0%) / C1 = 43 (43.0%). Closely matches the requested skew B2-C1 for IELTS Band 6.5-8.0.
+- Difficulty mapping (B1 -> beginner, B2 -> intermediate, C1 -> advanced): 0 mismatches verified.
+- Exam tagging: every word has IELTS and TOEFL (100/100); GRE added on advanced academic words; BCS/Admission applied broadly to common academic words. SAT intentionally omitted (these topics skew toward IELTS/academic-English use rather than US-college admissions).
+- Categories span 7 short labels: Cause (21), Effect (9), Solution (25), Advantage (4), Disadvantage (5), Evaluation (16), Speaking (20).
+- Topics span 6 functional labels: Functional: Cause and Effect (30), Functional: Problems and Solutions (25), Functional: Advantages and Disadvantages (15), Functional: Evaluation (10), Functional: Opinions (14), Functional: Personal Experience (6). (Speaking 20 split between Opinions and Personal Experience per natural usage.)
+- Multi-word phrase headwords (e.g. "stem from", "give rise to", "as far as I'm concerned") use a kebab-case id (apostrophe in "I'm" replaced by "im" in the slug) and the natural phrase as the `word` field. wordFamily is omitted on phrases where no same-headword inflectional forms exist; commonMistake is included only where a genuine learner error applies.
+- All 100 ids are unique kebab-case slugs; verified no internal duplicates (100 unique ids, 100 unique headwords).
+- Verified with `npx tsc --noEmit --skipLibCheck`: zero TypeScript errors in the new file.
+- Verified with a Node script (`node --experimental-strip-types`):
+  - extraWordsF.length === extraWordsFCount === 100 (PASS, meets 100-minimum spec)
+  - Unique ids: 100 of 100 (no duplicates)
+  - Unique headwords: 100 of 100 (case-insensitive)
+  - Zero collisions with the 791 existing headwords (case-insensitive on both id and word)
+  - Zero collisions with batch E exclusion list (assert/contend/advocate/concede/reiterate/underscore/stipulate/aver/postulate/endorse/rebut + batch-C trends/comparison/proportion/process words)
+  - Zero intra-batch duplicate ids and zero intra-batch duplicate headwords
+  - Field-completeness issues: 0 (every entry has non-empty bengali/definition/example, well-formed synonyms[1-3]/antonyms[0-3]/collocations[2-4], IELTS-tagged, cefr set, topic set)
+  - Every example sentence contains its headword (verified via toLowerCase().includes(), after fixing 6 examples that had used inflected forms: inciting->incite, given rise to->gives rise to, results in->can result in, gave fresh impetus to->gives fresh impetus to, nurturing->nurture, upheld->uphold)
+  - All wordFamily arrays (where present) contain only valid string same-headword forms
+  - Difficulty/CEFR mapping: 0 mismatches
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/vocab/sample-data-extra-f.ts (~1877 lines, 100 word entries with full IELTS enrichment).
+- Exports ready for downstream use: `extraWordsF` (Word[]) and `extraWordsFCount` (= 100).
+- Did NOT touch sample-data.ts, sample-data-extra-a/b/c/d.ts, data.ts, or any other file. Only created sample-data-extra-f.ts and appended this worklog section.
+- Suggested next step: a downstream consumer (e.g. data.ts merging sampleWords + extraWordsA + extraWordsB + extraWordsC + extraWordsD + extraWordsF, deduping by id/word as useWordBank already does) would yield 891 unique IELTS-focused entries (791 + 100). With batch F landed, the word bank gains 100 functional IELTS Task 2 + Speaking entries that complement the topical coverage of batches C and D.
+
+---
+Task ID: 5-8
+Agent: main (orchestrator)
+Task: §18 IELTS Vocabulary Expansion — batch 2 (+200 new words E+F) + non-mutating enrichment backfill (155 original words).
+
+Work Log:
+- Exported current 791 headwords as dedupe ref + 572 original entries as backfill candidates JSON (temp files, removed after use).
+- Launched 3 parallel subagents: batch E (100 words: Task 1 trends/comparison/proportion/process + Task 2 argumentation), batch F (100 words: Task 2 cause/effect/solution/eval + Speaking functional), enrichment-map (155 entries backfilling original words). All completed cleanly.
+- Wired E+F into data.ts dedupe. Added applyEnrichment() pure function that overlays enrichment-map onto original entries using ?? (existing fields ALWAYS preserved → user SRS keyed by word id never disturbed). Source data files (sample-data.ts, extra-a/b) UNTOUCHED.
+- Validation: 986 unique words (was 791, +195; 5 inter-batch dupes removed); 0 dupes; 0 orphan enrichment keys (all 155 map keys match real word ids); 58% enrichment coverage (569/986 have cefr+collocations, was 22%); all Bengali valid; all IELTS-tagged.
+
+Verification (Agent Browser):
+- API: GET /api/vocab → total 986, 569 with cefr, 569 with collocations.
+- DB: 4 users, 3 with progress (UNCHANGED — user data preserved; SRS keyed by stable word id; enrichment is overlay-only, never changes id/word).
+- UI: "Study flashcards 986 due now". Original word "analyze" now shows B2 badge + COLLOCATIONS (analyze data/the causes/the results) + WORD FAMILY (analysis/analyze/analytical/analytically) + COMMON MISTAKE (American vs British spelling). Batch-E word "plateau" renders with C1 + Trend topic. No runtime/console errors.
+- Lint clean. tsc: only pre-existing auth.ts:44 error (not introduced here; new files have 0 type errors).
+
+Stage Summary:
+- Library expanded 791 → 986 unique headwords (+195, +25% this batch; 572→986 total since expansion start, +72%).
+- Enrichment coverage 22% → 58% (155 original words backfilled with cefr+collocations+wordFamily+commonMistake via non-mutating overlay).
+- All 8 IELTS topic domains + comprehensive functional IELTS language now covered (trends, comparison, proportion, process, argumentation, cause/effect, solution, adv-dis, evaluation, opinions, personal experience).
+- Original content only; no copyrighted material; CEFR labels are estimates.
+- Toward §18.1 target (1,500-2,500): 986/1,500 lower bound. ~500+ more words to reach floor; quality-first per §18.1.

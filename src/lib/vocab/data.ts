@@ -5,12 +5,16 @@ import { extraWordsA } from "./sample-data-extra-a";
 import { extraWordsB } from "./sample-data-extra-b";
 import { extraWordsC } from "./sample-data-extra-c";
 import { extraWordsD } from "./sample-data-extra-d";
+import { extraWordsE } from "./sample-data-extra-e";
+import { extraWordsF } from "./sample-data-extra-f";
+import { enrichmentMap } from "./enrichment-map";
+import type { Word } from "./sample-data";
 
 // Deduplicate by id (and by lowercased word) so accidental overlaps between
 // the hand-authored batches never produce duplicate React keys.
-function dedupe(words: typeof sampleWords): typeof sampleWords {
+function dedupe(words: Word[]): Word[] {
   const seen = new Set<string>();
-  const out: typeof sampleWords = [];
+  const out: Word[] = [];
   for (const w of words) {
     const key = w.id.toLowerCase();
     const wordKey = w.word.toLowerCase();
@@ -22,13 +26,43 @@ function dedupe(words: typeof sampleWords): typeof sampleWords {
   return out;
 }
 
-export const allSampleWords = dedupe([
-  ...sampleWords,
-  ...extraWordsA,
-  ...extraWordsB,
-  ...extraWordsC,
-  ...extraWordsD,
-]);
+// Apply the non-mutating enrichment backfill to original entries. Existing
+// fields on a Word entry are ALWAYS preserved (we only fill MISSING optional
+// IELTS fields), so user SRS state keyed by word id is never disturbed.
+function applyEnrichment(words: Word[]): Word[] {
+  return words.map((w) => {
+    const e = enrichmentMap[w.id];
+    if (!e) return w;
+    return {
+      ...w,
+      cefr: w.cefr ?? e.cefr,
+      collocations: w.collocations ?? e.collocations,
+      wordFamily: w.wordFamily ?? e.wordFamily,
+      commonMistake: w.commonMistake ?? e.commonMistake,
+    };
+  });
+}
 
-export { sampleWords, extraWordsA, extraWordsB, extraWordsC, extraWordsD };
+export const allSampleWords = applyEnrichment(
+  dedupe([
+    ...sampleWords,
+    ...extraWordsA,
+    ...extraWordsB,
+    ...extraWordsC,
+    ...extraWordsD,
+    ...extraWordsE,
+    ...extraWordsF,
+  ])
+);
+
+export {
+  sampleWords,
+  extraWordsA,
+  extraWordsB,
+  extraWordsC,
+  extraWordsD,
+  extraWordsE,
+  extraWordsF,
+  enrichmentMap,
+};
 export type { Word, Difficulty, Exam, CefrLevel, WordFamily } from "./sample-data";
