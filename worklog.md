@@ -504,3 +504,32 @@ Stage Summary:
 - Coverage across 7 Speaking categories: discourse markers (20), hedging (20), abstract discussion (20), emphasis (15), personality (15), feelings (15), places (15).
 - Examples written in natural spoken register (first-person, contractions, fluid phrasing) — not stiff academic writing.
 - Original content only; no copyrighted material; CEFR labels are estimates.
+
+---
+Task ID: grammar-milestone-1
+Agent: main (orchestrator)
+Task: IELTS Grammar Learning Module — Milestone 1 (curriculum + data model + lesson/exercise engine + Grammar tab + progress tracking).
+
+Work Log:
+- Reused existing architecture: single `/` route (tabbed shell), Zustand persisted store, existing sync blob. No DB migration, no new API routes, no new deps.
+- Data model (src/lib/grammar/types.ts): GrammarLesson + GrammarExercise types with fields per AGENT.md §6 (id, slug, title, level, cefrLevel, topic, objectives, explanation, bengaliExplanation, pattern, examples, incorrectExamples, commonMistakes, ieltsApplications, exercises, prerequisites, estimatedMinutes, version, status).
+- Curriculum (src/lib/grammar/lessons-data.ts): 11 original lessons, 44 exercises. Level A (6 lessons: sentence structure, subject-verb agreement, tenses, articles, countable/uncountable, comparatives) + Level B (5 lessons: present perfect vs past simple, compound/complex sentences, conditionals, relative clauses, active/passive). Each lesson: objectives, explanation, Bengali summary, pattern, 3 correct examples, incorrect examples with corrections, common mistakes, IELTS applications (Task 1/2/Speaking), 4 exercises with answer keys + explanations.
+- Exercise engine (src/lib/grammar/evaluate.ts): deterministic answer matching (normalise + case-insensitive + accepts alternatives). Supports mc, fill-blank, correction, error-id, transformation, combine, order types.
+- Store extension (vocab-store.ts): added grammar slice (grammarLessons, grammarAttempts, grammarErrorCategories) + actions (recordGrammarAttempt, completeGrammarLesson). Extended RemoteProgressBlob + partialize + loadRemoteState/exportRemoteState so grammar progress syncs via the existing progress blob (zero new sync code). Updated resetProgress/resetAll.
+- Progress-sync hook extended to include grammar fields in dependency array.
+- UI: Grammar tab added to shell. grammar-view.tsx (home: 4 level paths A/B/C/D, progress summary stats, weakest-topics card from error categories, search + level filter, lesson cards with completion + accuracy badges). lesson-view.tsx (lesson: objectives, explanation, Bengali summary, pattern, correct/incorrect examples, common mistakes, IELTS applications; exercises with immediate feedback: MC auto-checks on select, fill-blank/correction/transformation/combine have Check button; correct/wrong colour states; explanation after answer; Save & finish records lesson completion + accuracy).
+- Fixed MC feedback bug (MC had no Check button → now auto-checks on select with immediate feedback).
+
+Verification (Agent Browser):
+- Grammar tab renders: 11 lessons, Levels A & B populated, C & D show "Coming soon". Progress summary (Lessons/Completed/Accuracy/Error types). Weakest-topics card.
+- Opened "Sentence Structure" lesson: all sections render (objectives, explanation, pattern, examples, common errors, common mistakes, IELTS applications, 4 exercises).
+- Answered MC "Which is a complete sentence?" → correct → emerald card border + "Correct" + explanation. Answered fill-blank "introduces" → correct + explanation. Answered remaining 2 → "Save & finish" appeared. Clicked → returned to grammar home with Completed=1 (19%), Accuracy=100%.
+- No runtime/console errors.
+- Lint clean. tsc: only pre-existing auth.ts:44 (not introduced here).
+- DB: 4 users, 3 with progress (UNCHANGED). Vocab: 1106 (UNCHANGED). Existing functionality preserved.
+
+Stage Summary:
+- Milestone 1 complete and verified: structured IELTS grammar curriculum (11 lessons, 44 exercises) with interactive practice, immediate feedback, progress tracking, and weakest-topic analytics — all integrated into the existing app, reusing the existing store/sync/auth/UI design system.
+- Grammar progress persists locally (guest) and syncs to the user's account on login (reuses existing blob).
+- All content original; no copyrighted material; Bengali explanations included.
+- Milestones 2-5 remain (Task 1/Task 2 specific lessons, AI writing feedback, advanced C/D topics, full test suite).

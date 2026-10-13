@@ -15,6 +15,20 @@ export interface QuizResult {
   correct: number;
 }
 
+// ---- Grammar progress (IELTS Grammar Learning Module) ----
+export interface GrammarLessonProgress {
+  completedAt: number;
+  accuracy: number; // 0..1
+  attempts: number;
+}
+export interface GrammarAttempt {
+  lessonId: string;
+  exerciseId: string;
+  topic: string;
+  correct: boolean;
+  ts: number;
+}
+
 export interface RemoteProgressBlob {
   customWords?: Word[];
   srs?: Record<string, SrsState>;
@@ -22,6 +36,10 @@ export interface RemoteProgressBlob {
   difficult?: Record<string, boolean>;
   quizHistory?: QuizResult[];
   reviewLog?: { wordId: string; quality: ReviewQuality; ts: number }[];
+  // grammar slice
+  grammarLessons?: Record<string, GrammarLessonProgress>;
+  grammarAttempts?: GrammarAttempt[];
+  grammarErrorCategories?: Record<string, number>;
 }
 
 interface VocabState {
@@ -31,6 +49,10 @@ interface VocabState {
   difficult: Record<string, boolean>;
   quizHistory: QuizResult[];
   reviewLog: { wordId: string; quality: ReviewQuality; ts: number }[];
+  // grammar slice
+  grammarLessons: Record<string, GrammarLessonProgress>;
+  grammarAttempts: GrammarAttempt[];
+  grammarErrorCategories: Record<string, number>;
   hasHydrated: boolean;
 
   // actions
@@ -44,6 +66,9 @@ interface VocabState {
   recordQuiz: (type: string, total: number, correct: number) => void;
   resetProgress: () => void;
   resetAll: () => void;
+  // grammar actions
+  recordGrammarAttempt: (a: Omit<GrammarAttempt, "ts">) => void;
+  completeGrammarLesson: (lessonId: string, accuracy: number) => void;
   // remote progress sync (login/logout)
   loadRemoteState: (blob: RemoteProgressBlob) => void;
   exportRemoteState: () => RemoteProgressBlob;
@@ -58,6 +83,9 @@ export const useVocabStore = create<VocabState>()(
       difficult: {},
       quizHistory: [],
       reviewLog: [],
+      grammarLessons: {},
+      grammarAttempts: [],
+      grammarErrorCategories: {},
       hasHydrated: false,
 
       setHydrated: (v) => set({ hasHydrated: v }),
@@ -123,6 +151,9 @@ export const useVocabStore = create<VocabState>()(
           difficult: {},
           quizHistory: [],
           reviewLog: [],
+          grammarLessons: {},
+          grammarAttempts: [],
+          grammarErrorCategories: {},
         }),
 
       resetAll: () =>
@@ -133,7 +164,30 @@ export const useVocabStore = create<VocabState>()(
           difficult: {},
           quizHistory: [],
           reviewLog: [],
+          grammarLessons: {},
+          grammarAttempts: [],
+          grammarErrorCategories: {},
         }),
+
+      recordGrammarAttempt: (a) => {
+        const attempt: GrammarAttempt = { ...a, ts: Date.now() };
+        const attempts = [...get().grammarAttempts, attempt].slice(-1000);
+        const errorCategories = { ...get().grammarErrorCategories };
+        if (!attempt.correct) {
+          errorCategories[attempt.topic] = (errorCategories[attempt.topic] ?? 0) + 1;
+        }
+        set({ grammarAttempts: attempts, grammarErrorCategories: errorCategories });
+      },
+
+      completeGrammarLesson: (lessonId, accuracy) => {
+        const prev = get().grammarLessons[lessonId];
+        const next: GrammarLessonProgress = {
+          completedAt: Date.now(),
+          accuracy,
+          attempts: (prev?.attempts ?? 0) + 1,
+        };
+        set({ grammarLessons: { ...get().grammarLessons, [lessonId]: next } });
+      },
 
       loadRemoteState: (blob) => {
         // Replace local progress with the remote blob (called on login).
@@ -144,6 +198,9 @@ export const useVocabStore = create<VocabState>()(
           difficult: blob.difficult ?? {},
           quizHistory: blob.quizHistory ?? [],
           reviewLog: blob.reviewLog ?? [],
+          grammarLessons: blob.grammarLessons ?? {},
+          grammarAttempts: blob.grammarAttempts ?? [],
+          grammarErrorCategories: blob.grammarErrorCategories ?? {},
         });
       },
 
@@ -156,6 +213,9 @@ export const useVocabStore = create<VocabState>()(
           difficult: s.difficult,
           quizHistory: s.quizHistory,
           reviewLog: s.reviewLog,
+          grammarLessons: s.grammarLessons,
+          grammarAttempts: s.grammarAttempts,
+          grammarErrorCategories: s.grammarErrorCategories,
         };
       },
     }),
@@ -169,6 +229,9 @@ export const useVocabStore = create<VocabState>()(
         difficult: s.difficult,
         quizHistory: s.quizHistory,
         reviewLog: s.reviewLog,
+        grammarLessons: s.grammarLessons,
+        grammarAttempts: s.grammarAttempts,
+        grammarErrorCategories: s.grammarErrorCategories,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated(true);

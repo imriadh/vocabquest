@@ -27,6 +27,7 @@ import {
   LogOut,
   UserCog,
   ShieldCheck,
+  GraduationCap,
 } from "lucide-react";
 import { DashboardView } from "./dashboard-view";
 import { LibraryView } from "./library-view";
@@ -34,6 +35,7 @@ import { FlashcardsView } from "./flashcards-view";
 import { QuizzesView } from "./quizzes-view";
 import { RevisionView } from "./revision-view";
 import { AdminView } from "./admin-view";
+import { GrammarView } from "@/components/grammar/grammar-view";
 import { AuthDialog } from "./auth-dialog";
 import { useWordBank } from "@/lib/vocab/hooks";
 import { primeVoices } from "@/lib/vocab/speech";
@@ -46,6 +48,7 @@ const BASE_TABS = [
   { id: "flashcards", label: "Flashcards", icon: Layers },
   { id: "quizzes", label: "Quizzes", icon: Brain },
   { id: "revision", label: "Revision", icon: Star },
+  { id: "grammar", label: "Grammar", icon: GraduationCap },
 ] as const;
 
 export function VocabApp() {
@@ -166,6 +169,9 @@ export function VocabApp() {
           </TabsContent>
           <TabsContent value="revision" className="mt-0">
             <RevisionView />
+          </TabsContent>
+          <TabsContent value="grammar" className="mt-0">
+            <GrammarView />
           </TabsContent>
           {session?.user?.role === "ADMIN" && (
             <TabsContent value="admin" className="mt-0">

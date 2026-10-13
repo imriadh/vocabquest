@@ -86,5 +86,8 @@ export function useProgressSync() {
     state.difficult,
     state.quizHistory,
     state.reviewLog,
+    state.grammarLessons,
+    state.grammarAttempts,
+    state.grammarErrorCategories,
   ]);
 }
