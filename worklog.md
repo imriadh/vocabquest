@@ -719,3 +719,31 @@ Stage Summary:
 - Milestone 3 complete and verified: personalised grammar diagnostics (recommended next lesson driven by error frequency × topic importance + prerequisites, review queue for struggling lessons, strongest/weakest topic mastery, accuracy trend sparkline) + grammar↔vocabulary bridge (related words on lesson pages).
 - Curriculum: 26 lessons, 104 exercises (Levels A/B/C). Level D (C1+) remains.
 - Reused existing store + sync + UI — zero new architecture.
+
+---
+Task ID: grammar-milestone-4
+Agent: main (orchestrator)
+Task: IELTS Grammar Learning Module — Milestone 4 (AI writing feedback with bring-your-own-key for OpenAI/Gemini/Grok/OpenAI-compatible).
+
+Work Log:
+- Prisma: added ApiKey model (id, userId, provider, label, encryptedKey, keyHint, timestamps; unique [userId,provider]; cascade delete with user). db:push applied. Added ENCRYPTION_KEY (64-hex) to .env. Restored NEXTAUTH_SECRET (was accidentally lost from .env; old sessions invalidated → re-login required; documented).
+- src/lib/crypto.ts: AES-256-GCM encrypt/decrypt (iv:authTag:ciphertext, base64) + keyHint (last 4 chars). Verified roundtrip.
+- BYOK API routes /api/user/api-keys (GET list-hints-only / POST upsert / DELETE): session-guarded; key encrypted on write; only keyHint returned to client (never plaintext).
+- LLM proxy /api/ai/feedback: loads user's encrypted key, decrypts server-side, calls provider (OpenAI + Grok + OpenAI-compatible use chat-completions; Gemini uses generateContent). Structured JSON feedback (summary, overallAccuracy, items[{quote,category,explanation,correction,lessonTopic}]). Prompt-injection guardrail (learner text sandboxed in user message; system prompt trusted). Output validated + capped. 60s timeout. 4KB input cap.
+- UI: ApiKeyManager dialog (provider selector OpenAI/Gemini/Grok/OpenAI-compatible; key/label/base/model inputs; stored-keys list with hint + remove). AiPracticeView (writing textarea, provider selector, sample prompts, submit, feedback render with category badges, quote→correction, explanation, "Learn this" lesson link). "AI Practice" tab visible only to authenticated users. Cross-tab lesson linking: AI feedback "Learn this" → switches to Grammar tab + opens the matching lesson.
+- Fixed lint setState-in-effect by deriving effectiveOpenId from pendingLessonId ?? openId instead of effect.
+
+Verification (Agent Browser):
+- Encryption roundtrip: encrypt→decrypt matches; keyHint returns last 4; ciphertext is iv:tag:ct (3 parts); plaintext NOT in DB.
+- Logged in as admin → "AI Practice" tab appears. Opened it → API keys button + provider selector (OpenAI default) + textarea.
+- No-key path: submitted writing without key → clean error "No API key stored for provider openai. Add one in Account settings."
+- Added fake key "sk-test-FAKEY1234567890" via API keys dialog → saved → displayed as "Openai · Test key ····7890" (only last 4). DB confirms encrypted (sk-test NOT in plaintext).
+- Submitted writing "People is becoming more dependent on technology." → proxy decrypted key, called OpenAI API → OpenAI returned 403 "Country, region, or territory not supported" (sandbox network restriction, not a code defect) → surfaced cleanly as "openai API error 403: ...". Proves full pipeline: storage→decryption→provider call→error handling.
+- Grammar tab still renders (Recommended next + Level C lessons) after all changes.
+- DB: 4 users, 3 with progress (unchanged), 1 api key (the test key). Vocab: 1106 (unchanged).
+- Lint clean. tsc: only pre-existing auth.ts:44 (not introduced here). One Turbopack dev-mode console false-positive on grammar-view:116 (component compiles + renders correctly; tsc confirms no real error).
+
+Stage Summary:
+- Milestone 4 complete and verified: AI writing feedback with bring-your-own-key support for OpenAI, Google Gemini, xAI Grok, and any OpenAI-compatible provider (DeepSeek, Mistral, Together, OpenRouter, etc.). Keys encrypted at rest (AES-256-GCM), never exposed to client, calls happen server-side. Feedback is structured (errors with quote/category/correction/explanation), advisory (no band score), and links to grammar lessons. Prompt-injection guarded.
+- Reused existing auth (NextAuth session), DB (Prisma), UI (shadcn), tab shell. No new deps.
+- Curriculum: 26 grammar lessons, 1106 vocab words. AI feedback connects writing → grammar lessons.

@@ -28,6 +28,7 @@ import {
   UserCog,
   ShieldCheck,
   GraduationCap,
+  Sparkles,
 } from "lucide-react";
 import { DashboardView } from "./dashboard-view";
 import { LibraryView } from "./library-view";
@@ -35,6 +36,7 @@ import { FlashcardsView } from "./flashcards-view";
 import { QuizzesView } from "./quizzes-view";
 import { RevisionView } from "./revision-view";
 import { AdminView } from "./admin-view";
+import { AiPracticeView } from "./ai-practice-view";
 import { GrammarView } from "@/components/grammar/grammar-view";
 import { AuthDialog } from "./auth-dialog";
 import { useWordBank } from "@/lib/vocab/hooks";
@@ -53,6 +55,7 @@ const BASE_TABS = [
 
 export function VocabApp() {
   const [tab, setTab] = useState<string>("dashboard");
+  const [pendingGrammarLesson, setPendingGrammarLesson] = useState<string | null>(null);
   const { sampleCount, customCount } = useWordBank();
   const { data: session, status } = useSession();
   const { toast } = useToast();
@@ -63,10 +66,15 @@ export function VocabApp() {
     primeVoices();
   }, []);
 
+  // Authenticated users get the AI Practice tab.
+  const authedTabs = status === "authenticated"
+    ? [...BASE_TABS, { id: "ai-practice", label: "AI Practice", icon: Sparkles }]
+    : BASE_TABS;
+
   const tabs =
     session?.user?.role === "ADMIN"
-      ? [...BASE_TABS, { id: "admin", label: "Admin", icon: UserCog }]
-      : BASE_TABS;
+      ? [...authedTabs, { id: "admin", label: "Admin", icon: UserCog }]
+      : authedTabs;
 
   const user = session?.user;
   const initials = user?.email ? user.email.slice(0, 2).toUpperCase() : "?";
@@ -171,8 +179,22 @@ export function VocabApp() {
             <RevisionView />
           </TabsContent>
           <TabsContent value="grammar" className="mt-0">
-            <GrammarView onNavigate={setTab} />
+            <GrammarView
+              onNavigate={setTab}
+              pendingLessonId={pendingGrammarLesson}
+              onConsumedPending={() => setPendingGrammarLesson(null)}
+            />
           </TabsContent>
+          {status === "authenticated" && (
+            <TabsContent value="ai-practice" className="mt-0">
+              <AiPracticeView
+                onOpenGrammar={(lessonId) => {
+                  setPendingGrammarLesson(lessonId);
+                  setTab("grammar");
+                }}
+              />
+            </TabsContent>
+          )}
           {session?.user?.role === "ADMIN" && (
             <TabsContent value="admin" className="mt-0">
               <AdminView />

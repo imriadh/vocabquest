@@ -20,4 +20,25 @@ model User {
   progress     String? // JSON-serialized SRS state blob (per-user)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  apiKeys      ApiKey[]
 }
+
+// Bring-your-own-key (AGENT.md §9.4) — provider API keys for AI features.
+// The key is stored encrypted (see src/lib/crypto.ts); only the last 4 chars
+// of the plaintext are ever returned to the client for display.
+model ApiKey {
+  id           String   @id @default(cuid())
+  userId       String
+  provider     String // "openai" | "gemini" | "grok" | "openai-compatible"
+  label        String? // optional user-facing label
+  encryptedKey String  // AES-256-GCM ciphertext (iv:authTag:ciphertext, base64)
+  keyHint      String  // last 4 chars of plaintext for display
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@index([userId])
+}
+

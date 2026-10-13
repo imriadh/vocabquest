@@ -42,7 +42,15 @@ import { LessonView } from "./lesson-view";
 import { EmptyState } from "@/components/vocab/ui-bits";
 import { cn } from "@/lib/utils";
 
-export function GrammarView({ onNavigate }: { onNavigate?: (tab: string) => void }) {
+export function GrammarView({
+  onNavigate,
+  pendingLessonId,
+  onConsumedPending,
+}: {
+  onNavigate?: (tab: string) => void;
+  pendingLessonId?: string | null;
+  onConsumedPending?: () => void;
+}) {
   const [query, setQuery] = useState("");
   const [level, setLevel] = useState("all");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -51,8 +59,6 @@ export function GrammarView({ onNavigate }: { onNavigate?: (tab: string) => void
   const grammarAttempts = useVocabStore((s) => s.grammarAttempts);
   const errorCategories = useVocabStore((s) => s.grammarErrorCategories);
   const hasHydrated = useVocabStore((s) => s.hasHydrated);
-
-  const openLesson = openId ? grammarLessons.find((l) => l.id === openId) : null;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -102,11 +108,21 @@ export function GrammarView({ onNavigate }: { onNavigate?: (tab: string) => void
     [grammarAttempts]
   );
 
+  // A pending lesson id (from another tab, e.g. AI feedback) takes precedence
+  // over the locally-tracked openId until consumed.
+  const effectiveOpenId = pendingLessonId ?? openId;
+  const openLesson = effectiveOpenId
+    ? grammarLessons.find((l) => l.id === effectiveOpenId)
+    : null;
+
   if (openLesson) {
     return (
       <LessonView
         lesson={openLesson}
-        onBack={() => setOpenId(null)}
+        onBack={() => {
+          setOpenId(null);
+          onConsumedPending?.();
+        }}
         onOpenLibrary={onNavigate ? () => onNavigate("library") : undefined}
       />
     );
