@@ -8,12 +8,13 @@
 //
 // Level A = foundations (A1–A2), Level B = essential IELTS (B1),
 // Level C = IELTS Writing-specific (B2): Academic Task 1, General Training
-// letters, and Task 2 essays. Level D (C1+) remains for a future milestone.
+// letters, and Task 2 essays. Level D = Advanced Control (C1+).
 
 import type { GrammarLesson } from "./types";
 import { academicTask1Lessons } from "./lessons-academic-task1";
 import { gtLetterLessons } from "./lessons-gt-letters";
 import { task2Lessons } from "./lessons-task2";
+import { levelDLessons } from "./lessons-level-d";
 
 export const grammarLessons: GrammarLesson[] = [
   // =====================================================================
@@ -999,6 +1000,7 @@ export const grammarLessons: GrammarLesson[] = [
   ...academicTask1Lessons,
   ...gtLetterLessons,
   ...task2Lessons,
+  ...levelDLessons,
 ];
 
 export const grammarLessonCount = grammarLessons.length;

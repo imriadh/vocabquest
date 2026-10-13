@@ -1,0 +1,1017 @@
+     1→// Original IELTS grammar curriculum.
+     2→//
+     3→// All explanations, examples, incorrect examples, common mistakes, IELTS
+     4→// applications, and exercises are original, hand-authored for this project.
+     5→// No content is copied from Cambridge, Oxford, British Council, IELTS
+     6→// official materials, or any other third-party source. External references
+     7→// (AGENT.md §12) were used only to prioritise topics, not to reproduce text.
+     8→//
+     9→// Level A = foundations (A1–A2), Level B = essential IELTS (B1),
+    10→// Level C = IELTS Writing-specific (B2): Academic Task 1, General Training
+    11→// letters, and Task 2 essays. Level D (C1+) remains for a future milestone.
+    12→
+    13→import type { GrammarLesson } from "./types";
+    14→import { academicTask1Lessons } from "./lessons-academic-task1";
+    15→import { gtLetterLessons } from "./lessons-gt-letters";
+    16→import { task2Lessons } from "./lessons-task2";
+    17→
+    18→export const grammarLessons: GrammarLesson[] = [
+    19→  // =====================================================================
+    20→  // LEVEL A — Foundations (A1–A2)
+    21→  // =====================================================================
+    22→  {
+    23→    id: "sentence-structure",
+    24→    slug: "sentence-structure",
+    25→    title: "Sentence Structure & Parts of Speech",
+    26→    level: "A",
+    27→    cefrLevel: "A1",
+    28→    topic: "Sentence structure",
+    29→    subtopic: "Basic sentence patterns",
+    30→    objectives: [
+    31→      "Identify the subject, verb, and object in a simple English sentence.",
+    32→      "Recognise the main parts of speech and their function.",
+    33→      "Build a grammatical simple sentence.",
+    34→    ],
+    35→    explanation:
+    36→      "A complete English sentence needs at least a subject and a verb, and it must express a complete thought. The most common pattern is Subject + Verb + Object (SVO). The subject is who or what performs the action; the verb is the action or state; the object receives the action. Words belong to classes called parts of speech: nouns (names: city, education), verbs (actions/states: rises, is), adjectives (describe nouns: urban, modern), adverbs (describe verbs/adjectives: rapidly, very), pronouns (replace nouns: it, they), prepositions (relationships of place/time: in, to), conjunctions (join: and, because), and determiners (a, the, some).",
+    37→    bengaliExplanation:
+    38→      "একটি পূর্ণ ইংরেজি বাক্যে অন্তত একটি subject এবং verb থাকতে হয়। সাধারণ গঠন হলো Subject + Verb + Object। Subject যে বা যা কাজ করে, verb হলো ক্রিয়া, object কাজের লক্ষ্য।",
+    39→    pattern: "Subject + Verb (+ Object).",
+    40→    examples: [
+    41→      { sentence: "Education improves living standards.", note: "SVO pattern." },
+    42→      { sentence: "The city grows rapidly.", note: "SV + adverb." },
+    43→      { sentence: "People migrate to urban areas.", note: "SVO + prepositional phrase." },
+    44→    ],
+    45→    incorrectExamples: [
+    46→      {
+    47→        sentence: "Education important for everyone.",
+    48→        error: "No verb. 'important' is an adjective, not a verb.",
+    49→        correction: "Education is important for everyone.",
+    50→      },
+    51→      {
+    52→        sentence: "Grows rapidly the city.",
+    53→        error: "Missing subject and wrong word order.",
+    54→        correction: "The city grows rapidly.",
+    55→      },
+    56→    ],
+    57→    commonMistakes: [
+    58→      "Writing a noun phrase with no verb (e.g. 'Many people in cities.' is not a sentence).",
+    59→      "Confusing adjectives and adverbs (e.g. 'grows rapid' instead of 'grows rapidly').",
+    60→    ],
+    61→    ieltsApplications: [
+    62→      { task: "Writing Task 2", note: "Every sentence in your essay must be complete: subject + verb + complete thought." },
+    63→      { task: "Speaking Part 2", note: "Short complete sentences are clearer than long broken ones." },
+    64→    ],
+    65→    exercises: [
+    66→      {
+    67→        id: "ss-1",
+    68→        type: "mc",
+    69→        prompt: "Which is a complete sentence?",
+    70→        options: ["Many people in the city.", "Many people live in the city.", "Living in the city.", "Because of the traffic."],
+    71→        answer: "Many people live in the city.",
+    72→        explanation: "Only this option has a subject ('Many people') and a verb ('live') and expresses a complete thought.",
+    73→        difficulty: 1,
+    74→      },
+    75→      {
+    76→        id: "ss-2",
+    77→        type: "fill-blank",
+    78→        prompt: "Complete: The government ____ new policies every year. (use: introduce, correct verb form)",
+    79→        answer: "introduces",
+    80→        explanation: "Present simple, third-person singular: the government (it) → introduces.",
+    81→        difficulty: 2,
+    82→      },
+    83→      {
+    84→        id: "ss-3",
+    85→        type: "error-id",
+    86→        prompt: "Identify the error: 'The number of tourists increasing every year.'",
+    87→        answer: "increasing",
+    88→        acceptable: ["no verb", "missing verb", "needs 'is increasing'"],
+    89→        explanation: "There is no finite verb. 'increasing' is a participle; the sentence needs 'is increasing' or 'increases'.",
+    90→        difficulty: 2,
+    91→      },
+    92→      {
+    93→        id: "ss-4",
+    94→        type: "correction",
+    95→        prompt: "Correct this sentence: 'Education very important for development.'",
+    96→        answer: "Education is very important for development.",
+    97→        acceptable: ["education is very important for development"],
+    98→        explanation: "Add the verb 'is' to link the subject 'Education' with the adjective phrase 'very important'.",
+    99→        difficulty: 1,
+   100→      },
+   101→    ],
+   102→    prerequisites: [],
+   103→    estimatedMinutes: 8,
+   104→    version: 1,
+   105→    status: "published",
+   106→  },
+   107→
+   108→  {
+   109→    id: "subject-verb-agreement",
+   110→    slug: "subject-verb-agreement",
+   111→    title: "Subject–Verb Agreement",
+   112→    level: "A",
+   113→    cefrLevel: "A2",
+   114→    topic: "Agreement",
+   115→    subtopic: "Singular and plural subjects",
+   116→    objectives: [
+   117→      "Match the verb form with the subject in number.",
+   118→      "Handle tricky subjects: 'the number of', 'a number of', indefinite pronouns, and long subjects.",
+   119→    ],
+   120→    explanation:
+   121→      "A singular subject takes a singular verb; a plural subject takes a plural verb. In the present simple, the third-person singular (he/she/it) adds -s. Watch for tricky subjects: 'The number of X is…' (the number is singular) but 'A number of X are…' (a number of = several). Indefinite pronouns like 'everyone', 'someone', 'each' are singular. When the subject is long, find the head noun and match the verb to it, not to the nearest noun.",
+   122→    bengaliExplanation:
+   123→      "Singular subject এর সাথে singular verb, plural subject এর সাথে plural verb বসে। 'The number of' সর্বদা singular, কিন্তু 'a number of' plural ধরা হয়।",
+   124→    pattern: "Singular subject → singular verb; Plural subject → plural verb.",
+   125→    examples: [
+   126→      { sentence: "The number of students has increased.", note: "'The number' is singular." },
+   127→      { sentence: "A number of students are absent today.", note: "'A number of' = several, plural." },
+   128→      { sentence: "Everyone needs a place to live.", note: "'Everyone' is singular." },
+   129→    ],
+   130→    incorrectExamples: [
+   131→      {
+   132→        sentence: "People is becoming more dependent on technology.",
+   133→        error: "'People' is plural, so it takes 'are', not 'is'.",
+   134→        correction: "People are becoming more dependent on technology.",
+   135→      },
+   136→      {
+   137→        sentence: "The number of tourists are rising.",
+   138→        error: "The subject is 'The number' (singular), not 'tourists'.",
+   139→        correction: "The number of tourists is rising.",
+   140→      },
+   141→    ],
+   142→    commonMistakes: [
+   143→      "Using 'is' with 'people', 'children', 'data' (all plural).",
+   144→      "Matching the verb to the nearest noun instead of the head noun: 'The list of items were long' → 'The list of items was long'.",
+   145→    ],
+   146→    ieltsApplications: [
+   147→      { task: "Academic Task 1", note: "'The proportion of households was…' (proportion is singular)." },
+   148→      { task: "Writing Task 2", note: "'People are…' / 'The number of people is…' — check agreement carefully." },
+   149→    ],
+   150→    exercises: [
+   151→      {
+   152→        id: "sva-1",
+   153→        type: "mc",
+   154→        prompt: "Choose the correct verb: 'The number of cars in the city ____ growing.'",
+   155→        options: ["is", "are", "was being", "have"],
+   156→        answer: "is",
+   157→        explanation: "The subject is 'The number' (singular), so the verb is 'is'.",
+   158→        difficulty: 2,
+   159→      },
+   160→      {
+   161→        id: "sva-2",
+   162→        type: "mc",
+   163→        prompt: "Choose the correct verb: 'A number of problems ____ been identified.'",
+   164→        options: ["has", "have", "is", "was"],
+   165→        answer: "have",
+   166→        explanation: "'A number of' = several, so it is plural → 'have been identified'.",
+   167→        difficulty: 2,
+   168→      },
+   169→      {
+   170→        id: "sva-3",
+   171→        type: "fill-blank",
+   172→        prompt: "Complete: Everyone in the class ____ a textbook. (use: have)",
+   173→        answer: "has",
+   174→        explanation: "'Everyone' is singular, so it takes 'has', not 'have'.",
+   175→        difficulty: 2,
+   176→      },
+   177→      {
+   178→        id: "sva-4",
+   179→        type: "error-id",
+   180→        prompt: "Find the agreement error: 'The data shows that urban populations are increasing.'",
+   181→        answer: "data shows",
+   182→        acceptable: ["data", "shows", "data show"],
+   183→        explanation: "'Data' is traditionally plural (singular 'datum'); 'the data show' is more accurate, though 'data shows' is increasingly accepted.",
+   184→        difficulty: 3,
+   185→      },
+   186→    ],
+   187→    prerequisites: ["sentence-structure"],
+   188→    estimatedMinutes: 10,
+   189→    version: 1,
+   190→    status: "published",
+   191→  },
+   192→
+   193→  {
+   194→    id: "tenses-foundation",
+   195→    slug: "present-past-future-forms",
+   196→    title: "Present, Past & Future Forms",
+   197→    level: "A",
+   198→    cefrLevel: "A2",
+   199→    topic: "Tense",
+   200→    subtopic: "Core tenses",
+   201→    objectives: [
+   202→      "Use the present simple for facts, routines, and general truths.",
+   203→      "Use the past simple for completed past actions.",
+   204→      "Use 'will', 'be going to', and present continuous for future meaning.",
+   205→    ],
+   206→    explanation:
+   207→      "Present simple describes general facts and routines ('Water boils at 100°C.'). Past simple describes completed actions with a finished time ('In 2010, the figure rose.'). For the future: 'will' for predictions and instant decisions ('Prices will rise.'); 'be going to' for intentions and evidence-based predictions ('It is going to rain.'); present continuous for fixed arrangements ('I am meeting the team tomorrow.').",
+   208→    bengaliExplanation:
+   209→      "Present simple সাধারণ সত্য ও নিয়মিত কাজের জন্য, past simple সম্পন্ন অতীত কাজের জন্য। Future-এ 'will' পূর্বাভাসের জন্য, 'be going to' উদ্দেশ্য বা প্রমাণভিত্তিক পূর্বাভাসের জন্য।",
+   210→    pattern: "Present: S + V(s). Past: S + V-ed (regular). Future: S + will + V / S + be going to + V.",
+   211→    examples: [
+   212→      { sentence: "The sun rises in the east.", note: "General fact — present simple." },
+   213→      { sentence: "In 2015, the population reached 2 million.", note: "Completed past — past simple." },
+   214→      { sentence: "The population will reach 3 million by 2030.", note: "Prediction — will." },
+   215→    ],
+   216→    incorrectExamples: [
+   217→      {
+   218→        sentence: "In 2010 the figure increase by 10%.",
+   219→        error: "Past time (2010) needs the past simple, not present.",
+   220→        correction: "In 2010 the figure increased by 10%.",
+   221→      },
+   222→      {
+   223→        sentence: "I will to go to the meeting tomorrow.",
+   224→        error: "After 'will' use the bare infinitive (no 'to').",
+   225→        correction: "I will go to the meeting tomorrow.",
+   226→      },
+   227→    ],
+   228→    commonMistakes: [
+   229→      "Using present simple with a finished past time ('Yesterday I go…' → 'Yesterday I went…').",
+   230→      "Adding 'to' after 'will' ('will to go').",
+   231→    ],
+   232→    ieltsApplications: [
+   233→      { task: "Academic Task 1", note: "Past simple for completed chart periods; present simple for general facts; 'is projected to / will' for forecasts." },
+   234→      { task: "Writing Task 2", note: "Present simple for general arguments; past simple for historical context." },
+   235→    ],
+   236→    exercises: [
+   237→      {
+   238→        id: "tf-1",
+   239→        type: "mc",
+   240→        prompt: "Choose: 'In 1990, the number of cars ____ 500.'",
+   241→        options: ["is", "was", "will be", "are"],
+   242→        answer: "was",
+   243→        explanation: "1990 is a finished past time → past simple 'was'.",
+   244→        difficulty: 1,
+   245→      },
+   246→      {
+   247→        id: "tf-2",
+   248→        type: "fill-blank",
+   249→        prompt: "Complete: By 2030, the population ____ reach 10 million. (use: will)",
+   250→        answer: "will",
+   251→        explanation: "Prediction for a future year → 'will reach'.",
+   252→        difficulty: 1,
+   253→      },
+   254→      {
+   255→        id: "tf-3",
+   256→        type: "correction",
+   257→        prompt: "Correct: 'Water boil at 100 degrees Celsius.'",
+   258→        answer: "Water boils at 100 degrees Celsius.",
+   259→        acceptable: ["water boils at 100 degrees celsius"],
+   260→        explanation: "General fact → present simple; 'water' (singular) → 'boils'.",
+   261→        difficulty: 1,
+   262→      },
+   263→      {
+   264→        id: "tf-4",
+   265→        type: "error-id",
+   266→        prompt: "Find the tense error: 'The report show that the figures rose last year.'",
+   267→        answer: "show",
+   268→        acceptable: ["report show", "the report shows"],
+   269→        explanation: "'The report' is singular → 'shows'. (Agreement + present simple for what the report states.)",
+   270→        difficulty: 2,
+   271→      },
+   272→    ],
+   273→    prerequisites: ["sentence-structure"],
+   274→    estimatedMinutes: 12,
+   275→    version: 1,
+   276→    status: "published",
+   277→  },
+   278→
+   279→  {
+   280→    id: "articles-a-an-the",
+   281→    slug: "articles-a-an-the",
+   282→    title: "Articles: a / an / the",
+   283→    level: "A",
+   284→    cefrLevel: "A2",
+   285→    topic: "Articles",
+   286→    subtopic: "Definite, indefinite, zero article",
+   287→    objectives: [
+   288→      "Use 'a/an' for singular countable nouns mentioned for the first time.",
+   289→      "Use 'the' for specific or previously mentioned nouns.",
+   290→      "Recognise when no article is needed (general plurals, uncountables, abstract ideas).",
+   291→    ],
+   292→    explanation:
+   293→      "'A/an' is used before a singular countable noun that is not specific ('I read a book.'). 'An' is used before a vowel sound ('an hour', 'an MBA'). 'The' is used when the noun is specific, unique, or already known ('the sun', 'the government', 'the chart below'). No article is used for general statements with plural or uncountable nouns ('Education is important.' / 'People migrate for work.') and for most abstract ideas in a general sense.",
+   294→    bengaliExplanation:
+   295→      "অনির্দিষ্ট singular countable noun-এর আগে 'a/an' বসে। নির্দিষ্ট বা পূর্বে উল্লেখিত noun-এর আগে 'the' বসে। সাধারণ plural বা uncountable noun-এর আগে কোনো article লাগে না।",
+   296→    pattern: "a/an + singular countable (indefinite); the + specific noun; Ø + general plural/uncountable.",
+   297→    examples: [
+   298→      { sentence: "I saw a film. The film was about climate change.", note: "'a' first mention, 'the' second mention." },
+   299→      { sentence: "Education is a basic right.", note: "General abstract → no article; singular countable → 'a'." },
+   300→      { sentence: "The government introduced the policy in 2015.", note: "Specific → 'the'." },
+   301→    ],
+   302→    incorrectExamples: [
+   303→      {
+   304→        sentence: "Education is the basic right for every child.",
+   305→        error: "Here 'basic right' is one of many, not a specific one already mentioned.",
+   306→        correction: "Education is a basic right for every child.",
+   307→      },
+   308→      {
+   309→        sentence: "The people migrate to cities for work.",
+   310→        error: "General statement about 'people' → no article.",
+   311→        correction: "People migrate to cities for work.",
+   312→      },
+   313→    ],
+   314→    commonMistakes: [
+   315→      "Adding 'the' before general plural nouns ('the people are…' when meaning people in general).",
+   316→      "Using 'a' before a plural ('a students').",
+   317→      "Forgetting 'the' before superlatives ('the best', not 'best').",
+   318→    ],
+   319→    ieltsApplications: [
+   320→      { task: "Academic Task 1", note: "'The chart shows…' (specific chart); 'The percentage of…' (specific)." },
+   321→      { task: "Writing Task 2", note: "General statements: 'Education is…' (no article), not 'The education is…'." },
+   322→    ],
+   323→    exercises: [
+   324→      {
+   325→        id: "art-1",
+   326→        type: "mc",
+   327→        prompt: "Choose: '____ government has introduced a new policy.'",
+   328→        options: ["A", "An", "The", "—"],
+   329→        answer: "The",
+   330→        explanation: "A specific government (the one being discussed) → 'The'.",
+   331→        difficulty: 1,
+   332→      },
+   333→      {
+   334→        id: "art-2",
+   335→        type: "fill-blank",
+   336→        prompt: "Insert the correct article (or none): '____ education is essential for development.'",
+   337→        answer: "",
+   338→        acceptable: ["no article", "zero", "Ø"],
+   339→        explanation: "General abstract noun 'education' → no article.",
+   340→        difficulty: 2,
+   341→      },
+   342→      {
+   343→        id: "art-3",
+   344→        type: "mc",
+   345→        prompt: "Choose: 'She is ____ MBA student.'",
+   346→        options: ["a", "an", "the", "—"],
+   347→        answer: "an",
+   348→        explanation: "'MBA' begins with a vowel sound /em/ → 'an MBA'.",
+   349→        difficulty: 2,
+   350→      },
+   351→      {
+   352→        id: "art-4",
+   353→        type: "correction",
+   354→        prompt: "Correct: 'The people who live in cities face many problems.' (the people = people in general)",
+   355→        answer: "People who live in cities face many problems.",
+   356→        acceptable: ["people who live in cities face many problems"],
+   357→        explanation: "General statement → remove 'the'. (If a specific group were intended, 'the' would be correct.)",
+   358→        difficulty: 2,
+   359→      },
+   360→    ],
+   361→    prerequisites: ["sentence-structure"],
+   362→    estimatedMinutes: 10,
+   363→    version: 1,
+   364→    status: "published",
+   365→  },
+   366→
+   367→  {
+   368→    id: "countable-uncountable-quantifiers",
+   369→    slug: "countable-uncountable-quantifiers",
+   370→    title: "Countable & Uncountable Nouns; Quantifiers",
+   371→    level: "A",
+   372→    cefrLevel: "A2",
+   373→    topic: "Nouns",
+   374→    subtopic: "Countability and quantity",
+   375→    objectives: [
+   376→      "Distinguish countable and uncountable nouns.",
+   377→      "Use quantifiers correctly: some, any, much, many, few, little, a lot of.",
+   378→      "Avoid agreement errors caused by treating uncountables as plural.",
+   379→    ],
+   380→    explanation:
+   381→      "Countable nouns can be counted and have plural forms (book/books, student/students). Uncountable nouns cannot be counted and usually have no plural (information, advice, equipment, research, money, water). Use 'many/few' with countable plurals, 'much/little' with uncountables, and 'some/any/a lot of' with both. Uncountable nouns take a singular verb ('The information is useful.'). Many learners wrongly add -s to uncountables ('informations', 'advices') — this is always wrong in standard English.",
+   382→    bengaliExplanation:
+   383→      "Countable noun গণনা করা যায় ও plural হয়। Uncountable noun গণনা করা যায় না ও সাধারণত plural হয় না (information, advice)। এগুলো সবসময় singular verb নেয়।",
+   384→    pattern: "many/few + countable plural; much/little + uncountable; some/any/a lot of + both.",
+   385→    examples: [
+   386→      { sentence: "Much research has been conducted on this topic.", note: "'research' uncountable." },
+   387→      { sentence: "Few students attend the optional session.", note: "'students' countable plural." },
+   388→      { sentence: "The information is reliable.", note: "Uncountable → singular verb." },
+   389→    ],
+   390→    incorrectExamples: [
+   391→      {
+   392→        sentence: "She gave me many advices.",
+   393→        error: "'Advice' is uncountable — it has no plural and cannot take 'many'.",
+   394→        correction: "She gave me a lot of advice.",
+   395→      },
+   396→      {
+   397→        sentence: "The informations were helpful.",
+   398→        error: "'Information' is uncountable and singular.",
+   399→        correction: "The information was helpful.",
+   400→      },
+   401→    ],
+   402→    commonMistakes: [
+   403→      "Pluralising uncountables: 'informations', 'furnitures', 'homeworks'.",
+   404→      "Using 'much' with countables ('much students') or 'many' with uncountables ('many money').",
+   405→    ],
+   406→    ieltsApplications: [
+   407→      { task: "Academic Task 1", note: "'a large amount of data' (uncountable), not 'many data'." },
+   408→      { task: "Writing Task 2", note: "'much evidence', 'many factors' — choose the quantifier by countability." },
+   409→    ],
+   410→    exercises: [
+   411→      {
+   412→        id: "cu-1",
+   413→        type: "mc",
+   414→        prompt: "Choose: 'There isn't ____ information about the topic.'",
+   415→        options: ["many", "much", "a few", "few"],
+   416→        answer: "much",
+   417→        explanation: "'Information' is uncountable → 'much'.",
+   418→        difficulty: 2,
+   419→      },
+   420→      {
+   421→        id: "cu-2",
+   422→        type: "mc",
+   423→        prompt: "Choose the correct sentence:",
+   424→        options: [
+   425→          "The researches were published.",
+   426→          "The research was published.",
+   427→          "The research were published.",
+   428→          "The researches was published.",
+   429→        ],
+   430→        answer: "The research was published.",
+   431→        explanation: "'Research' is uncountable and singular.",
+   432→        difficulty: 2,
+   433→      },
+   434→      {
+   435→        id: "cu-3",
+   436→        type: "correction",
+   437→        prompt: "Correct: 'She gave me an advice.'",
+   438→        answer: "She gave me some advice.",
+   439→        acceptable: ["she gave me a piece of advice", "she gave me advice", "she gave me some advice"],
+   440→        explanation: "'Advice' is uncountable → 'some advice' or 'a piece of advice'.",
+   441→        difficulty: 2,
+   442→      },
+   443→      {
+   444→        id: "cu-4",
+   445→        type: "fill-blank",
+   446→        prompt: "Complete: Only a ____ students passed the exam. (use: few / little — choose by noun)",
+   447→        answer: "few",
+   448→        explanation: "'Students' is countable → 'few'. ('A few' = some; 'few' = not many.)",
+   449→        difficulty: 2,
+   450→      },
+   451→    ],
+   452→    prerequisites: ["articles-a-an-the"],
+   453→    estimatedMinutes: 10,
+   454→    version: 1,
+   455→    status: "published",
+   456→  },
+   457→
+   458→  {
+   459→    id: "comparatives-superlatives",
+   460→    slug: "comparatives-superlatives",
+   461→    title: "Comparatives & Superlatives",
+   462→    level: "A",
+   463→    cefrLevel: "A2",
+   464→    topic: "Comparisons",
+   465→    subtopic: "Comparing two or more items",
+   466→    objectives: [
+   467→      "Form comparatives and superlatives correctly.",
+   468→      "Use comparative structures for describing change and proportion.",
+   469→      "Avoid double comparatives and incorrect modifiers.",
+   470→    ],
+   471→    explanation:
+   472→      "Short adjectives add -er/-est (fast → faster → fastest). Long adjectives use more/most (important → more important → most important). Irregular: good → better → best; bad → worse → worst. Use 'than' after a comparative ('A is higher than B'). Use 'the' before a superlative ('the highest'). To show proportional change, use structures like 'twice as many as', 'three times more than'. Avoid double comparatives ('more higher') — never combine 'more' with an -er form.",
+   473→    bengaliExplanation:
+   474→      "ছোট adjective-এ -er/-est যোগ হয় (fast→faster→fastest)। বড় adjective-এ more/most বসে। তুলনায় 'than', superlative-এ 'the' বসে। দ্বিগুণ/ত্রিগুণ বোঝাতে 'twice as many as' ব্যবহার করুন।",
+   475→    pattern: "short: -er / the -est; long: more / the most; irregular: good/better/best.",
+   476→    examples: [
+   477→      { sentence: "Urban areas are more crowded than rural areas.", note: "Long adjective → 'more crowded'." },
+   478→      { sentence: "This is the highest figure on the chart.", note: "Short adjective → 'the highest'." },
+   479→      { sentence: "Car use is twice as common as bus use.", note: "Proportional comparison." },
+   480→    ],
+   481→    incorrectExamples: [
+   482→      {
+   483→        sentence: "The figure is more higher than last year.",
+   484→        error: "Double comparative: 'more' + '-er'.",
+   485→        correction: "The figure is higher than last year.",
+   486→      },
+   487→      {
+   488→        sentence: "This is most expensive option.",
+   489→        error: "Superlative needs 'the'.",
+   490→        correction: "This is the most expensive option.",
+   491→      },
+   492→    ],
+   493→    commonMistakes: [
+   494→      "Double comparatives: 'more better', 'more faster'.",
+   495→      "Missing 'the' before superlatives.",
+   496→      "Using 'than' with a superlative.",
+   497→    ],
+   498→    ieltsApplications: [
+   499→      { task: "Academic Task 1", note: "'The figure was highest in 2020' / 'twice as high as in 2010'." },
+   500→      { task: "Writing Task 2", note: "'A more effective solution is…' / 'the most significant factor'." },
+   501→    ],
+   502→    exercises: [
+   503→      {
+   504→        id: "cs-1",
+   505→        type: "mc",
+   506→        prompt: "Choose: 'This year's figure is ____ than last year's.'",
+   507→        options: ["more high", "higher", "highest", "the higher"],
+   508→        answer: "higher",
+   509→        explanation: "Comparative of 'high' is 'higher'; use 'than'. No 'more'.",
+   510→        difficulty: 1,
+   511→      },
+   512→      {
+   513→        id: "cs-2",
+   514→        type: "correction",
+   515→        prompt: "Correct: 'It is the more expensive option of the two.'",
+   516→        answer: "It is the more expensive of the two.",
+   517→        acceptable: ["it is the more expensive of the two", "it is the more expensive option of the two"],
+   518→        explanation: "Comparing two items → comparative 'more expensive' (not superlative 'most'). 'The' is correct before 'more'.",
+   519→        difficulty: 3,
+   520→      },
+   521→      {
+   522→        id: "cs-3",
+   523→        type: "fill-blank",
+   524→        prompt: "Complete: Public transport is twice ____ popular as cycling. (use: as)",
+   525→        answer: "as",
+   526→        explanation: "Proportional structure: 'twice as popular as'.",
+   527→        difficulty: 2,
+   528→      },
+   529→      {
+   530→        id: "cs-4",
+   531→        type: "error-id",
+   532→        prompt: "Find the error: 'The result was more better than expected.'",
+   533→        answer: "more better",
+   534→        acceptable: ["better", "more better"],
+   535→        explanation: "Double comparative. 'Better' is already comparative; remove 'more'. → 'better than expected'.",
+   536→        difficulty: 1,
+   537→      },
+   538→    ],
+   539→    prerequisites: ["countable-uncountable-quantifiers"],
+   540→    estimatedMinutes: 10,
+   541→    version: 1,
+   542→    status: "published",
+   543→  },
+   544→
+   545→  // =====================================================================
+   546→  // LEVEL B — Essential IELTS grammar (B1)
+   547→  // =====================================================================
+   548→  {
+   549→    id: "present-perfect-vs-past-simple",
+   550→    slug: "present-perfect-vs-past-simple",
+   551→    title: "Present Perfect vs Past Simple",
+   552→    level: "B",
+   553→    cefrLevel: "B1",
+   554→    topic: "Tense",
+   555→    subtopic: "Choosing the right past tense",
+   556→    objectives: [
+   557→      "Use the past simple for completed past actions with a finished time.",
+   558→      "Use the present perfect for past actions with a result now, or unfinished time.",
+   559→      "Choose correctly between the two in IELTS contexts.",
+   560→    ],
+   561→    explanation:
+   562→      "Use the past simple when the time is finished and known ('In 2010, sales rose.'). Use the present perfect when the exact past time is not stated or the period is unfinished ('Sales have risen this year.'; 'Researchers have discovered a new method.'). The present perfect connects a past action to the present. Common signals: past simple → 'yesterday, in 2010, last week, ago'; present perfect → 'just, already, yet, ever, recently, so far, since, for' (with unfinished periods).",
+   563→    bengaliExplanation:
+   564→      "Past simple সম্পন্ন অতীত সময়ের জন্য (in 2010, yesterday)। Present perfect এমন অতীত কাজের জন্য যার ফল এখনও আছে বা সময় এখনও শেষ হয়নি (this year, since, for)।",
+   565→    pattern: "Past simple: S + V-ed (finished time). Present perfect: S + have/has + V3 (unfinished/result now).",
+   566→    examples: [
+   567→      { sentence: "In 2018, the population reached 2 million.", note: "Finished past time → past simple." },
+   568→      { sentence: "The population has reached 2 million.", note: "Result now, no specific past time → present perfect." },
+   569→      { sentence: "I have lived here for ten years.", note: "Unfinished period → present perfect." },
+   570→    ],
+   571→    incorrectExamples: [
+   572→      {
+   573→        sentence: "I have seen the film yesterday.",
+   574→        error: "'Yesterday' is a finished time → use past simple, not present perfect.",
+   575→        correction: "I saw the film yesterday.",
+   576→      },
+   577→      {
+   578→        sentence: "Since 2010, the figure rose steadily.",
+   579→        error: "'Since 2010' links to now → present perfect.",
+   580→        correction: "Since 2010, the figure has risen steadily.",
+   581→      },
+   582→    ],
+   583→    commonMistakes: [
+   584→      "Using present perfect with a finished past time ('have done it yesterday').",
+   585→      "Using past simple with 'since' or 'for' linking to now.",
+   586→    ],
+   587→    ieltsApplications: [
+   588→      { task: "Academic Task 1", note: "Past simple for finished chart years; present perfect only when the chart includes 'to now' or general statements." },
+   589→      { task: "Writing Task 2", note: "'In recent years, X has become…' (unfinished period → present perfect)." },
+   590→    ],
+   591→    exercises: [
+   592→      {
+   593→        id: "pp-1",
+   594→        type: "mc",
+   595→        prompt: "Choose: 'In 2015, the number of users ____ 1 million.'",
+   596→        options: ["has reached", "reached", "have reached", "reaching"],
+   597→        answer: "reached",
+   598→        explanation: "Finished past time (2015) → past simple 'reached'.",
+   599→        difficulty: 2,
+   600→      },
+   601→      {
+   602→        id: "pp-2",
+   603→        type: "fill-blank",
+   604→        prompt: "Complete: Since 2010, the city ____ (grow) rapidly.",
+   605→        answer: "has grown",
+   606→        explanation: "'Since 2010' links to now → present perfect 'has grown'.",
+   607→        difficulty: 2,
+   608→      },
+   609→      {
+   610→        id: "pp-3",
+   611→        type: "error-id",
+   612→        prompt: "Find the error: 'I have finished the report yesterday.'",
+   613→        answer: "have finished",
+   614→        acceptable: ["have finished yesterday", "yesterday", "have finished"],
+   615→        explanation: "'Yesterday' is finished → use past simple 'finished', not present perfect.",
+   616→        difficulty: 2,
+   617→      },
+   618→      {
+   619→        id: "pp-4",
+   620→        type: "correction",
+   621→        prompt: "Correct: 'Researchers discovered a new method recently.' (intended: the method is still new/useful now)",
+   622→        answer: "Researchers have discovered a new method recently.",
+   623→        acceptable: ["researchers have discovered a new method recently"],
+   624→        explanation: "'Recently' with a present result → present perfect 'have discovered'.",
+   625→        difficulty: 3,
+   626→      },
+   627→    ],
+   628→    prerequisites: ["tenses-foundation"],
+   629→    estimatedMinutes: 12,
+   630→    version: 1,
+   631→    status: "published",
+   632→  },
+   633→
+   634→  {
+   635→    id: "compound-complex-sentences",
+   636→    slug: "compound-complex-sentences",
+   637→    title: "Compound & Complex Sentences",
+   638→    level: "B",
+   639→    cefrLevel: "B1",
+   640→    topic: "Clauses",
+   641→    subtopic: "Combining clauses",
+   642→    objectives: [
+   643→      "Join independent clauses with coordinating conjunctions (and, but, or, so).",
+   644→      "Form complex sentences with subordinating conjunctions (although, because, when, if).",
+   645→      "Punctuate compound and complex sentences correctly.",
+   646→    ],
+   647→    explanation:
+   648→      "A compound sentence joins two independent clauses with a coordinating conjunction (FANBOYS: for, and, nor, but, or, yet, so) and a comma: 'The plan was costly, so it was cancelled.' A complex sentence has one independent clause and at least one dependent clause introduced by a subordinator (although, because, since, when, if, while, whereas, even though). When the dependent clause comes first, use a comma: 'Although the plan was costly, it was approved.' When it comes second, no comma is usually needed: 'It was approved although it was costly.' Do not join two independent clauses with only a comma (comma splice).",
+   649→    bengaliExplanation:
+   650→      "Compound sentence-এ দুটি independent clause যুক্ত হয় coordinating conjunction দিয়ে (and, but, so)। Complex sentence-এ subordinating conjunction থাকে (although, because, when)। শুরুতে dependent clause থাকলে comma বসে।",
+   651→    pattern: "Compound: IC, cc IC. Complex: DC, IC. / IC DC.",
+   652→    examples: [
+   653→      { sentence: "The cost was high, but the benefits were clear.", note: "Compound." },
+   654→      { sentence: "Although the cost was high, the plan was approved.", note: "Complex; comma after the dependent clause." },
+   655→      { sentence: "The plan was approved because the benefits were clear.", note: "Complex; no comma." },
+   656→    ],
+   657→    incorrectExamples: [
+   658→      {
+   659→        sentence: "Although the cost was high but the plan was approved.",
+   660→        error: "Do not use 'but' after 'although'. One subordinator is enough.",
+   661→        correction: "Although the cost was high, the plan was approved.",
+   662→      },
+   663→      {
+   664→        sentence: "The cost was high, the plan was approved.",
+   665→        error: "Comma splice: two independent clauses joined only by a comma.",
+   666→        correction: "The cost was high, but the plan was approved.",
+   667→      },
+   668→    ],
+   669→    commonMistakes: [
+   670→      "Double conjunctions: 'Although... but...', 'Because... so...'.",
+   671→      "Comma splices: joining two full sentences with only a comma.",
+   672→    ],
+   673→    ieltsApplications: [
+   674→      { task: "Writing Task 2", note: "Concession ('Although X, Y') is one of the highest-value structures for essays." },
+   675→      { task: "Academic Task 1", note: "'While/whereas' for comparing two trends." },
+   676→    ],
+   677→    exercises: [
+   678→      {
+   679→        id: "cc-1",
+   680→        type: "mc",
+   681→        prompt: "Choose the correct sentence:",
+   682→        options: [
+   683→          "Although it was late, but we continued.",
+   684→          "Although it was late, we continued.",
+   685→          "Although it was late we continued.",
+   686→          "Although it was late but we continued.",
+   687→        ],
+   688→        answer: "Although it was late, we continued.",
+   689→        explanation: "Use only 'although'; do not add 'but'. Comma after the dependent clause.",
+   690→        difficulty: 2,
+   691→      },
+   692→      {
+   693→        id: "cc-2",
+   694→        type: "error-id",
+   695→        prompt: "Find the error: 'The traffic was bad, we arrived on time.'",
+   696→        answer: "comma splice",
+   697→        acceptable: ["the traffic was bad, we arrived", "comma", "comma splice"],
+   698→        explanation: "Two independent clauses joined by only a comma. Fix with a conjunction: 'The traffic was bad, but we arrived on time.'",
+   699→        difficulty: 2,
+   700→      },
+   701→      {
+   702→        id: "cc-3",
+   703→        type: "combine",
+   704→        prompt: "Combine into one complex sentence: 'The policy was unpopular. The government implemented it.' (use: although)",
+   705→        answer: "Although the policy was unpopular, the government implemented it.",
+   706→        acceptable: ["the government implemented the policy although it was unpopular", "although the policy was unpopular the government implemented it", "the government implemented it although the policy was unpopular"],
+   707→        explanation: "Place 'Although' at the start of the dependent clause; use a comma when the dependent clause comes first.",
+   708→        difficulty: 2,
+   709→      },
+   710→      {
+   711→        id: "cc-4",
+   712→        type: "correction",
+   713→        prompt: "Correct: 'Because the data was limited so the conclusion was uncertain.'",
+   714→        answer: "Because the data was limited, the conclusion was uncertain.",
+   715→        acceptable: ["because the data was limited, the conclusion was uncertain", "the conclusion was uncertain because the data was limited"],
+   716→        explanation: "Remove 'so'. Use only one conjunction ('because').",
+   717→        difficulty: 2,
+   718→      },
+   719→    ],
+   720→    prerequisites: ["tenses-foundation"],
+   721→    estimatedMinutes: 12,
+   722→    version: 1,
+   723→    status: "published",
+   724→  },
+   725→
+   726→  {
+   727→    id: "conditionals",
+   728→    slug: "conditionals-zero-first-second",
+   729→    title: "Conditionals (Zero, First, Second)",
+   730→    level: "B",
+   731→    cefrLevel: "B1",
+   732→    topic: "Conditionals",
+   733→    subtopic: "Real and hypothetical conditions",
+   734→    objectives: [
+   735→      "Form zero, first, and second conditionals.",
+   736→      "Choose the conditional that matches the meaning (fact, likely, hypothetical).",
+   737→      "Use conditionals in IELTS Task 2 for proposals and hypothetical reasoning.",
+   738→    ],
+   739→    explanation:
+   740→      "Zero conditional (general facts): If + present simple, present simple — 'If water reaches 100°C, it boils.' First conditional (real/likely future): If + present simple, will + verb — 'If the government invests in education, the economy will improve.' Second conditional (hypothetical/unlikely): If + past simple, would + verb — 'If cities had better public transport, fewer people would drive.' Note: in the 'if' clause of the second conditional, use the past simple form (was/were); 'If I were...' is the formal form for all subjects.",
+   741→    bengaliExplanation:
+   742→      "Zero conditional সাধারণ সত্যের জন্য (If + present, present)। First conditional সম্ভাব্য ভবিষ্যতের জন্য (If + present, will)। Second conditional কাল্পনিক/অসম্ভাব্য ক্ষেত্রে (If + past, would)।",
+   743→    pattern: "0: If + present, present. 1: If + present, will + V. 2: If + past, would + V.",
+   744→    examples: [
+   745→      { sentence: "If prices rise, demand falls.", note: "Zero — general fact." },
+   746→      { sentence: "If the council builds more cycle lanes, more people will cycle.", note: "First — likely future." },
+   747→      { sentence: "If public transport were cheaper, more people would use it.", note: "Second — hypothetical." },
+   748→    ],
+   749→    incorrectExamples: [
+   750→      {
+   751→        sentence: "If it will rain, the match is cancelled.",
+   752→        error: "'Will' does not go in the 'if' clause of a first conditional.",
+   753→        correction: "If it rains, the match will be cancelled.",
+   754→      },
+   755→      {
+   756→        sentence: "If I would have time, I would help.",
+   757→        error: "Second conditional 'if' clause needs the past simple, not 'would'.",
+   758→        correction: "If I had time, I would help.",
+   759→      },
+   760→    ],
+   761→    commonMistakes: [
+   762→      "Using 'will' in the 'if' clause.",
+   763→      "Using 'would' in the 'if' clause.",
+   764→      "Mixing first and second patterns ('If it will rain, I would stay').",
+   765→    ],
+   766→    ieltsApplications: [
+   767→      { task: "Writing Task 2", note: "'If governments invested more in renewable energy, emissions would fall.' (Second — policy proposal/hypothetical.)" },
+   768→    ],
+   769→    exercises: [
+   770→      {
+   771→        id: "cd-1",
+   772→        type: "mc",
+   773→        prompt: "Choose: 'If the price ____, demand will fall.'",
+   774→        options: ["will rise", "rises", "rose", "would rise"],
+   775→        answer: "rises",
+   776→        explanation: "First conditional 'if' clause uses the present simple.",
+   777→        difficulty: 2,
+   778→      },
+   779→      {
+   780→        id: "cd-2",
+   781→        type: "fill-blank",
+   782→        prompt: "Complete (second conditional): If public transport ____ cheaper, more people would use it. (use: be)",
+   783→        answer: "were",
+   784→        acceptable: ["was"],
+   785→        explanation: "Second conditional 'if' clause uses the past simple. 'Were' is the formal form; 'was' is acceptable informally.",
+   786→        difficulty: 3,
+   787→      },
+   788→      {
+   789→        id: "cd-3",
+   790→        type: "error-id",
+   791→        prompt: "Find the error: 'If I will have more time, I would learn another language.'",
+   792→        answer: "will have",
+   793→        acceptable: ["will have", "would learn"],
+   794→        explanation: "Second conditional: 'if' clause should be past simple 'had', and main clause 'would + verb'. → 'If I had more time, I would learn another language.'",
+   795→        difficulty: 3,
+   796→      },
+   797→      {
+   798→        id: "cd-4",
+   799→        type: "transformation",
+   800→        prompt: "Rewrite as a second conditional (hypothetical): 'Because the funding is low, progress is slow.'",
+   801→        answer: "If the funding were higher, progress would be faster.",
+   802→        acceptable: ["if the funding were higher, progress would be faster", "if funding were higher, progress would be faster", "if the funding were higher, progress would be faster"],
+   803→        explanation: "Second conditional: If + past simple, would + verb. The meaning shifts to hypothetical.",
+   804→        difficulty: 3,
+   805→      },
+   806→    ],
+   807→    prerequisites: ["tenses-foundation"],
+   808→    estimatedMinutes: 14,
+   809→    version: 1,
+   810→    status: "published",
+   811→  },
+   812→
+   813→  {
+   814→    id: "relative-clauses",
+   815→    slug: "relative-clauses",
+   816→    title: "Relative Clauses (who, which, that, whose)",
+   817→    level: "B",
+   818→    cefrLevel: "B1",
+   819→    topic: "Clauses",
+   820→    subtopic: "Defining and non-defining relative clauses",
+   821→    objectives: [
+   822→      "Use who/which/that/whose to add information about a noun.",
+   823→      "Punctuate defining vs non-defining relative clauses correctly.",
+   824→      "Choose the correct relative pronoun.",
+   825→    ],
+   826→    explanation:
+   827→      "A relative clause gives more information about a noun. Use 'who' for people, 'which' for things, 'that' for either (in defining clauses), and 'whose' for possession. A defining relative clause identifies the noun and is not set off by commas ('The students who pass the exam will receive a certificate.'). A non-defining relative clause adds extra information and is set off by commas ('The students, who had studied hard, all passed.'). In non-defining clauses, you cannot use 'that' — use 'who' or 'which'.",
+   828→    bengaliExplanation:
+   829→      "Defining relative clause noun-কে চিহ্নিত করে, comma লাগে না। Non-defining clause অতিরিক্ত তথ্য দেয়, comma দিয়ে আলাদা করা হয়। Non-defining-এ 'that' বসে না।",
+   830→    pattern: "Defining: noun + who/which/that + … (no commas). Non-defining: noun, who/which + …, (commas).",
+   831→    examples: [
+   832→      { sentence: "The policy that was introduced last year has reduced emissions.", note: "Defining." },
+   833→      { sentence: "The new policy, which was introduced last year, has reduced emissions.", note: "Non-defining." },
+   834→      { sentence: "Students whose attendance is low may fail.", note: "'whose' for possession." },
+   835→    ],
+   836→    incorrectExamples: [
+   837→      {
+   838→        sentence: "The policy, that was introduced last year, reduced emissions.",
+   839→        error: "'That' cannot be used in a non-defining clause.",
+   840→        correction: "The policy, which was introduced last year, reduced emissions.",
+   841→      },
+   842→      {
+   843→        sentence: "People who lives in cities face congestion.",
+   844→        error: "After 'who' the verb must agree with the antecedent ('people' → plural).",
+   845→        correction: "People who live in cities face congestion.",
+   846→      },
+   847→    ],
+   848→    commonMistakes: [
+   849→      "Using 'that' after a comma in a non-defining clause.",
+   850→      "Verb agreement error after 'who'/'which'.",
+   851→    ],
+   852→    ieltsApplications: [
+   853→      { task: "Writing Task 2", note: "'People who live in poverty…' / 'Policies which target education…'" },
+   854→      { task: "Academic Task 1", note: "'The figure, which peaked in 2010, then declined.' (Non-defining adds extra detail.)" },
+   855→    ],
+   856→    exercises: [
+   857→      {
+   858→        id: "rc-1",
+   859→        type: "mc",
+   860→        prompt: "Choose the correct option: 'The report ____ was published yesterday is alarming.'",
+   861→        options: ["who", "which", "whose", "where"],
+   862→        answer: "which",
+   863→        explanation: "'Report' is a thing → 'which' (or 'that').",
+   864→        difficulty: 1,
+   865→      },
+   866→      {
+   867→        id: "rc-2",
+   868→        type: "mc",
+   869→        prompt: "Which sentence is correct?",
+   870→        options: [
+   871→          "The city, that I grew up in, has changed.",
+   872→          "The city, which I grew up in, has changed.",
+   873→          "The city who I grew up in has changed.",
+   874→          "The city which I grew up in, has changed.",
+   875→        ],
+   876→        answer: "The city, which I grew up in, has changed.",
+   877→        explanation: "Non-defining clause → use 'which' (not 'that') and commas.",
+   878→        difficulty: 2,
+   879→      },
+   880→      {
+   881→        id: "rc-3",
+   882→        type: "error-id",
+   883→        prompt: "Find the error: 'People which live in cities face pollution.'",
+   884→        answer: "which",
+   885→        acceptable: ["which live", "which"],
+   886→        explanation: "Use 'who' for people → 'People who live in cities…'.",
+   887→        difficulty: 1,
+   888→      },
+   889→      {
+   890→        id: "rc-4",
+   891→        type: "fill-blank",
+   892→        prompt: "Complete: Students ____ attendance is below 75% may fail the course. (possession)",
+   893→        answer: "whose",
+   894→        explanation: "'Whose' shows possession (the attendance belongs to the students).",
+   895→        difficulty: 2,
+   896→      },
+   897→    ],
+   898→    prerequisites: ["compound-complex-sentences"],
+   899→    estimatedMinutes: 12,
+   900→    version: 1,
+   901→    status: "published",
+   902→  },
+   903→
+   904→  {
+   905→    id: "active-passive-voice",
+   906→    slug: "active-passive-voice",
+   907→    title: "Active & Passive Voice",
+   908→    level: "B",
+   909→    cefrLevel: "B1",
+   910→    topic: "Voice",
+   911→    subtopic: "When to use the passive",
+   912→    objectives: [
+   913→      "Form the passive: be + past participle.",
+   914→      "Choose the passive when the action matters more than the actor.",
+   915→      "Avoid overusing the passive in IELTS Writing.",
+   916→    ],
+   917→    explanation:
+   918→      "In the active voice, the subject performs the action ('Researchers developed the method.'). In the passive, the subject receives the action ('The method was developed by researchers.'). Form: be + past participle (V3). Use the passive when the actor is unknown, obvious, or less important than the action — common in process descriptions and academic reporting ('It is widely believed that…'). Do not overuse the passive: excessive passives make writing weak and unclear. In Task 2, prefer the active voice unless there is a clear reason for the passive.",
+   919→    bengaliExplanation:
+   920→      "Active voice-এ subject ক্রিয়া করে। Passive voice-এ subject ক্রিয়া গ্রহণ করে (be + V3)। Process বর্ণনা বা যখন actor অজানা/অগুরুত্বপূর্ণ, তখন passive ব্যবহার করুন। অতিরিক্ত passive এড়িয়ে চলুন।",
+   921→    pattern: "Passive: S + be + V3 (+ by + agent).",
+   922→    examples: [
+   923→      { sentence: "The data was collected over six months.", note: "Actor not stated — appropriate passive." },
+   924→      { sentence: "It is widely believed that urbanisation will continue.", note: "Passive reporting structure." },
+   925→      { sentence: "First, the raw material is collected.", note: "Process description." },
+   926→    ],
+   927→    incorrectExamples: [
+   928→      {
+   929→        sentence: "The data was collected by researchers over six months.",
+   930→        error: "Not wrong grammatically, but stating the obvious actor adds no value.",
+   931→        correction: "The data was collected over six months.",
+   932→      },
+   933→      {
+   934→        sentence: "It is believed by people that education is important.",
+   935→        error: "Clumsy and wordy; 'People believe' or 'It is widely believed' is cleaner.",
+   936→        correction: "It is widely believed that education is important.",
+   937→      },
+   938→    ],
+   939→    commonMistakes: [
+   940→      "Overusing the passive in essays, making claims vague ('Mistakes were made').",
+   941→      "Forgetting the 'be' verb ('The method developed' instead of 'was developed').",
+   942→    ],
+   943→    ieltsApplications: [
+   944→      { task: "Academic Task 1", note: "Process descriptions often use the present passive: 'is collected', 'is transported'." },
+   945→      { task: "Writing Task 2", note: "Use 'It is argued that…' for academic hedging, but prefer active voice for your own arguments." },
+   946→    ],
+   947→    exercises: [
+   948→      {
+   949→        id: "ap-1",
+   950→        type: "transformation",
+   951→        prompt: "Rewrite in the passive: 'Researchers collected the data over six months.'",
+   952→        answer: "The data was collected over six months.",
+   953→        acceptable: ["the data was collected over six months", "the data was collected over six months by researchers"],
+   954→        explanation: "Object 'the data' becomes subject; 'collected' → 'was collected'.",
+   955→        difficulty: 2,
+   956→      },
+   957→      {
+   958→        id: "ap-2",
+   959→        type: "mc",
+   960→        prompt: "Choose the correct passive form: 'The report ____ by a team of experts.'",
+   961→        options: ["wrote", "was written", "is writing", "has wrote"],
+   962→        answer: "was written",
+   963→        explanation: "Passive: be (was) + past participle (written).",
+   964→        difficulty: 1,
+   965→      },
+   966→      {
+   967→        id: "ap-3",
+   968→        type: "error-id",
+   969→        prompt: "Find the error: 'The new method developed in 2020.'",
+   970→        answer: "developed",
+   971→        acceptable: ["developed", "the new method developed", "missing was"],
+   972→        explanation: "Missing the 'be' verb for the passive. → 'The new method was developed in 2020.'",
+   973→        difficulty: 2,
+   974→      },
+   975→      {
+   976→        id: "ap-4",
+   977→        type: "mc",
+   978→        prompt: "Which is more natural for an academic overview?",
+   979→        options: [
+   980→          "Mistakes were made by the government.",
+   981→          "The government made mistakes.",
+   982→          "Mistakes made by the government.",
+   983→          "Mistakes being made by the government.",
+   984→        ],
+   985→        answer: "The government made mistakes.",
+   986→        explanation: "When the actor is known and relevant, the active voice is clearer and more direct.",
+   987→        difficulty: 3,
+   988→      },
+   989→    ],
+   990→    prerequisites: ["tenses-foundation"],
+   991→    estimatedMinutes: 12,
+   992→    version: 1,
+   993→    status: "published",
+   994→  },
+   995→
+   996→  // =====================================================================
+   997→  // LEVEL C — IELTS Writing-specific (B2) — Milestone 2
+   998→  // =====================================================================
+   999→  ...academicTask1Lessons,
+  1000→  ...gtLetterLessons,
+  1001→  ...task2Lessons,
+  1002→];
+  1003→
+  1004→export const grammarLessonCount = grammarLessons.length;
+  1005→
+  1006→// Helpers for the UI.
+  1007→export function getLessonById(id: string): GrammarLesson | undefined {
+  1008→  return grammarLessons.find((l) => l.id === id);
+  1009→}
+  1010→
+  1011→export const grammarLevelLabels: Record<string, string> = {
+  1012→  A: "Level A — Foundations (A1–A2)",
+  1013→  B: "Level B — Essential IELTS (B1)",
+  1014→  C: "Level C — Writing Development (B2)",
+  1015→  D: "Level D — Advanced Control (C1+)",
+  1016→};
+  1017→
