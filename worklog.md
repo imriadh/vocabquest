@@ -170,3 +170,115 @@ Stage Summary:
 - Full auth: signup/login/logout; guest mode preserved; single seeded admin.
 - Admin can list/search/disable/enable/promote/demote/delete users with self-action guardrails.
 - Per-user progress synced to DB (cross-device) when logged in; guest stays local.
+
+---
+Task ID: 4
+Agent: data-author-d (general-purpose sub-agent)
+Task: Author an original 110-word IELTS-focused vocabulary batch at src/lib/vocab/sample-data-extra-d.ts using the ENRICHED Word schema (cefr, topic, collocations, wordFamily, commonMistake). Focus: topics 5-8 (Health, Crime/Law, Media, Urbanization) + IELTS functional language (advantages/disadvantages, agreeing/disagreeing/qualifying, problems/solutions/recommendations). Must not collide with the existing 572 headwords in sample-data.ts + extraWordsA + extraWordsB (per existing_headwords.txt), nor with the parallel batch C coverage (Environment/Climate, Technology/AI, Education/Youth, Globalization/Culture/Tourism, functional trends/cause-effect).
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 11) to align with the original-data architecture and learn the enriched `Word` interface now exported from sample-data.ts (id, word, phonetic?, partOfSpeech?, bengali, definition, example, synonyms[], antonyms[], difficulty, exams[], category, cefr?, topic?, collocations?, wordFamily?, commonMistake?).
+- Read /home/z/my-project/existing_headwords.txt (572 lines) and built a strict no-go set for headword selection.
+- Verified the existing extra-batch files (sample-data-extra-a.ts and sample-data-extra-b.ts) do NOT yet use the enriched fields — so this batch D is the first to populate cefr/topic/collocations/wordFamily/commonMistake.
+- Inspected sample-data-extra-b.ts apostrophe convention: apostrophes inside strings are escaped as `\'` even within double-quoted strings; followed the same convention in batch D for consistency.
+- Authored 110 hand-written vocabulary entries — every definition, Bengali translation, IPA phonetic, example sentence, synonym, antonym, collocation, word-family note, and common-mistake observation written from scratch for this batch. No content copied from any website, dictionary, or third-party dataset. Bengali uses proper Unicode script (no romanisation); example sentences actually use the headword in IELTS-style academic register.
+- Distribution (verified by Node script):
+  - Topic 5 (Health, Diet, and Public Policy): 22 words
+  - Topic 6 (Crime, Law, and Society): 22 words
+  - Topic 7 (Media, Advertising, and Consumerism): 22 words
+  - Topic 8 (Urbanization and Infrastructure): 22 words
+  - Functional: Advantages and Disadvantages: 5 words
+  - Functional: Opinions: 7 words
+  - Functional: Problems and Solutions: 10 words
+  - Total: 110 (PASS, meets the 110-minimum spec)
+- CEFR distribution (target ~20/40/40 for B1/B2/C1): B1=26 (23.6%) / B2=40 (36.4%) / C1=44 (40.0%). Close to target; skew toward B2-C1 as required for IELTS Band 6.5-8.0.
+- difficulty mapping (B1->beginner, B2->intermediate, C1->advanced): 0 mismatches verified.
+- Exam tagging: every word has IELTS and TOEFL; GRE added on advanced academic words; BCS/Admission applied broadly to common academic words. Spot counts: IELTS=110, TOEFL=110, GRE~50, BCS=110, Admission=110. SAT intentionally omitted (these topics skew toward IELTS/academic-English use rather than US-college admissions).
+- Categories span 6 short labels: Health, Law, Media, Urbanization, Argument, Opinion, Solution.
+- All ids are kebab-case slugs equal to the headword (single-word slugs; `well-being` is the only hyphenated headword and uses id `well-being`). Verified: 110 unique ids, 110 unique headwords, no internal duplicates.
+- Verified with `npx tsc --noEmit --skipLibCheck`: no TypeScript errors reported in the new file.
+- Verified with a Node script (`node --experimental-strip-types`):
+  - extraWordsD.length === extraWordsDCount === 110
+  - Unique ids: 110 of 110 (no duplicates)
+  - Unique headwords: 110 of 110 (case-insensitive)
+  - Zero collisions with the 572 existing headwords (case-insensitive on both id and word)
+  - Zero intra-batch duplicate ids and zero intra-batch duplicate headwords
+  - Field-completeness issues: 0 (every entry has non-empty bengali/definition/example, well-formed synonyms[]/antonyms[] arrays, IELTS-tagged, cefr set, topic set, collocations with 2-4 entries each, wordFamily populated, commonMistake present on every entry)
+  - Every example sentence contains the headword (verified via toLowerCase().includes())
+  - Difficulty/CEFR mapping: 0 mismatches
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/vocab/sample-data-extra-d.ts (~720 lines, 110 word entries using the enriched IELTS schema).
+- Exports ready for downstream use: `extraWordsD` (Word[]) and `extraWordsDCount` (= 110).
+- Did NOT touch sample-data.ts, sample-data-extra-a.ts, sample-data-extra-b.ts, or data.ts. Only created sample-data-extra-d.ts and appended this worklog section.
+- When a downstream consumer wires it in (e.g. data.ts merging sampleWords + extraWordsA + extraWordsB + extraWordsC + extraWordsD, deduping by id/word as useWordBank already does), the word bank will offer 682 unique IELTS-focused entries (572 + 110), with batch D adding the first enriched-schema coverage of topics 5-8 and IELTS functional language.
+
+---
+Task ID: 3
+Agent: data-author-c (general-purpose sub-agent, parallel batch C)
+Task: Author an original 110-word IELTS-focused vocabulary batch at src/lib/vocab/sample-data-extra-c.ts using the ENRICHED schema (cefr, topic, collocations, wordFamily, commonMistake). Focus: topics 1-4 + IELTS functional language (trends, cause-effect, comparison, proportion).
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 11) to align with the original-data architecture and the enriched `Word` interface (now including cefr?, topic?, collocations?, wordFamily?, commonMistake?).
+- Read `/home/z/my-project/existing_headwords.txt` (572 headwords from sample-data.ts + extra-a + extra-b after dedupe) as the strict no-go set when picking my 110 headwords.
+- Carefully chose 110 headwords whose PRIMARY topic is topics 1-4 or functional trends/cause-effect — explicitly avoiding batch D's domains (Health/Diet/Public Policy, Crime/Law/Society, Media/Advertising/Consumerism, Urbanization/Infrastructure).
+- Authored 110 hand-written vocabulary entries — every definition, Bengali translation, IPA phonetic, example sentence, synonym, antonym, collocation, word-family form, and commonMistake written from scratch for this batch. No content copied from any website, dictionary, or third-party dataset. Bengali uses proper Unicode script (no romanization); for words with no native Bengali equivalent, descriptive Bengali phrases used (e.g. "টেলিমেট্রি , দূরমাপন বিজ্ঞান"). IPA verified; example sentences actually use the headword and are IELTS Writing Task 2 / academic Reading style. Apostrophes inside example sentences are escaped as \' per spec; strings use double quotes throughout.
+- Distribution by topic (110 total):
+  - Topic 1 Environment, Climate, Sustainability: 22 words (afforestation, biodegradable, combustion, contamination, effluent, exhaust, greenhouse, landfill, monsoon, poach, aquifer, coral, salinity, acidification, reforestation, smog, pollutant, ecological, sustainable, toxic, vegetation, biosphere)
+  - Topic 2 Technology, AI, Automation: 22 words (automation, autonomous, biometric, cybersecurity, drone, firewall, gadget, prototype, semiconductor, touchscreen, broadband, compatible, obsolete, quantum, virtual, blockchain, robotics, nanotechnology, interconnected, telemetry, microchip, malware)
+  - Topic 3 Education, Youth, Employment: 22 words (coursework, extracurricular, aptitude, cognition, cohort, dropout, credential, discipline, mentor, tutorial, vocational, compulsory, dissertation, plagiarism, remedial, inquiry, alumni, cognitive, formative, memorize, peer, tenure)
+  - Topic 4 Globalization, Culture, Tourism: 22 words (cosmopolitan, diaspora, assimilation, indigenous, multicultural, ethnic, souvenir, hospitality, destination, landmark, itinerary, expatriate, vernacular, cuisine, pilgrimage, ancestral, ritual, dialect, folklore, artisan, exotic, bilingual)
+  - IELTS Functional language: 22 words (surge, plateau, plummet, soar, escalate, dwindle, peak, slump, spike, plunge, disproportionately, outpace, outstrip, converge, diverge, markedly, marginally, twofold, precipitate, underlie, emanate, entail)
+- CEFR distribution: B1 = 23 (20.9%), B2 = 43 (39.1%), C1 = 44 (40.0%) — closely matches the requested ~20/40/40 split for the IELTS Band 6.5-8.0 target.
+- Difficulty distribution (mapped from CEFR): beginner = 23, intermediate = 43, advanced = 44.
+- Exam tagging: every entry has IELTS and TOEFL (110/110); GRE on all 44 advanced academic words; SAT on 31 advanced academic college-prep words; BCS and Admission on all 110 (common academic words broadly).
+- Categories span 7 distinct labels: Environment (22), Technology (22), Education (22), Culture (22), Trend (12), Comparison (6), Cause and Effect (4).
+- All ids are kebab-case single words equal to the headword; verified no collision with any of the 572 existing headwords (case-insensitive on both id and word).
+- Verified no intra-batch duplicate ids and no intra-batch duplicate words (110 unique ids, 110 unique words).
+- Verified zero collisions (case-insensitive) with batch A's 200 words and batch B's 200 words.
+- Verified every entry has the required enriched fields: cefr, topic, collocations (2-4 natural combos each), wordFamily (where grammatically valid, otherwise omitted), commonMistake (only where a genuine common learner error was identified — omitted on a handful of entries where no real error came to mind rather than inventing one).
+- Verified with `npx tsc --noEmit --skipLibCheck`: no TypeScript errors reported in the new file (only pre-existing unrelated errors under examples/, skills/, and src/lib/auth.ts).
+- Verified with a Node script via `node --experimental-strip-types`:
+  - Total words: 110 (PASS, meets the 110-minimum spec)
+  - extraWordsC.length === extraWordsCCount === 110
+  - Unique ids: 110 of 110 (no duplicates)
+  - Unique words: 110 of 110 (no duplicates)
+  - Zero id collisions with the 572 existing headwords (case-insensitive)
+  - Zero word collisions (case-insensitive) with sample-data.ts + extraWordsA + extraWordsB (572 unique words)
+  - Zero collisions with batch A (200 words) and batch B (200 words) — guaranteed disjoint from A and B
+  - Field-completeness issues: 0 (every entry has non-empty bengali/definition/example/phonetic/partOfSpeech, well-formed synonyms[1-4]/antonyms[0-3]/collocations[2-4], is IELTS-tagged, has cefr, has topic)
+  - No synonym array contains the headword itself
+  - All wordFamily arrays (where present) contain only valid string same-headword forms
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/vocab/sample-data-extra-c.ts (~820 lines, 110 word entries with full IELTS enrichment).
+- Exports ready for downstream use: `extraWordsC` (Word[]) and `extraWordsCCount` (= 110).
+- Did NOT touch sample-data.ts, sample-data-extra-a.ts, sample-data-extra-b.ts, or any other file. Only created sample-data-extra-c.ts and appended this worklog section.
+- Suggested next step: a downstream consumer (e.g. /api/vocab route or hooks.useWordBank) can merge `sampleWords` + `extraWordsA` + `extraWordsB` + `extraWordsC` (682 total words), deduping by id (useWordBank already dedupes by id). With batch C landed, the word bank now offers 682 original IELTS-focused entries — 110 of which carry the full enriched schema (cefr, topic, collocations, wordFamily, commonMistake) for richer flashcard/quiz/review UX.
+
+---
+Task ID: 3-9
+Agent: main (orchestrator)
+Task: §18 IELTS Vocabulary Expansion — batch 1 (enriched schema, +219 unique words).
+
+Work Log:
+- Extracted existing 572 headwords as dedupe reference (/tmp/existing_headwords.txt, used by subagents, then removed).
+- Extended Word schema (sample-data.ts) compatibly with optional fields: cefr (A2/B1/B2/C1/C2), topic, collocations[], wordFamily{noun,verb,adjective,adverb}, commonMistake. Backward-compatible: existing 572 entries unchanged (fields optional).
+- Launched 2 parallel subagents (Task 3 = batch C topics 1-4 + trends/cause-effect; Task 4 = batch D topics 5-8 + adv-dis/opinion/solution). Each authored 110 original entries.
+- Wired extraWordsC + extraWordsD into data.ts dedupe (existing guard handles id+word collisions).
+- Rendered new fields in UI: CefrBadge added to WordListBadges + flashcard front; Library expanded detail shows topic, CEFR, collocations, word family, common mistake; flashcard back shows collocations line.
+- Validation script: 791 unique (was 572, +219); 9 inter-batch dupes removed by guard; 0 missing required fields; 0 bad Bengali; 220/220 have cefr+collocations; 182/220 have wordFamily; 200/220 have commonMistake; all 791 IELTS-tagged.
+
+Verification (Agent Browser):
+- API: GET /api/vocab → total 791, 791 IELTS-tagged, 219 with cefr, 219 with collocations.
+- DB: 4 users, 3 with progress (UNCHANGED — user data preserved; SRS keyed by stable word id, new words get fresh state, existing words untouched).
+- UI: "Study flashcards 791 due now". Library shows new word "biodegradable" with B2 CEFR badge + topic + Bengali. Expanded detail renders COLLOCATIONS (biodegradable material/packaging/waste) + WORD FAMILY + COMMON MISTAKE. "afforestation" expanded shows C1 + collocations + word family. No runtime/console errors.
+- Lint clean. tsc: only the PRE-EXISTING auth.ts:44 error remains (documented in prior audit; not introduced here; new files have 0 type errors).
+
+Stage Summary:
+- Library expanded 572 → 791 unique headwords (+219, +38%) in one verified batch.
+- All 8 IELTS topic domains covered (~22 words each) + functional IELTS language (trends, cause-effect, adv-dis, opinions, problems-solutions).
+- CEFR distribution (new words): B1 49 (22%), B2 83 (38%), C1 88 (40%) — skews B2-C1 per Band 6.5-8.0 target.
+- Enrichment: collocations + word family + common mistakes now visible to learners in Library + Flashcards.
+- Original content only; no copyrighted dictionary/example material copied.
+- Toward §18.1 target (1,500-2,500): 791/~1,500 lower bound. Next batches should add ~700+ more words; quality > count per §18.1.

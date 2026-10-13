@@ -25,7 +25,14 @@ import { useWordBank } from "@/lib/vocab/hooks";
 import { useVocabStore } from "@/lib/vocab/store";
 import type { Word } from "@/lib/vocab/sample-data";
 import { speak, speechSupported } from "@/lib/vocab/speech";
-import { BengaliText, DifficultyBadge, EmptyState, ExamBadges, LoadingState } from "./ui-bits";
+import {
+  BengaliText,
+  CefrBadge,
+  DifficultyBadge,
+  EmptyState,
+  ExamBadges,
+  LoadingState,
+} from "./ui-bits";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
@@ -242,6 +249,7 @@ export function FlashcardsView() {
             <Card className="flex h-full flex-col items-center justify-center gap-3 border-2 p-6 text-center">
               <div className="flex flex-wrap items-center justify-center gap-2">
                 <DifficultyBadge difficulty={current.difficulty} />
+                <CefrBadge cefr={current.cefr} />
                 <ExamBadges exams={current.exams} />
               </div>
               <h2 className="text-4xl font-bold">{current.word}</h2>
@@ -286,6 +294,12 @@ export function FlashcardsView() {
               <p className="text-sm text-foreground/90">{current.definition}</p>
               {current.example && (
                 <p className="rounded-md bg-muted/60 p-2 text-sm italic">&ldquo;{current.example}&rdquo;</p>
+              )}
+              {current.collocations && current.collocations.length > 0 && (
+                <p className="text-xs">
+                  <span className="text-muted-foreground">Collocations: </span>
+                  <span className="font-medium">{current.collocations.join(" · ")}</span>
+                </p>
               )}
               <div className="flex flex-wrap gap-2">
                 {current.synonyms.length > 0 && (

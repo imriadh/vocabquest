@@ -16,6 +16,19 @@
 export type Exam = "IELTS" | "TOEFL" | "GRE" | "SAT" | "BCS" | "Admission";
 export type Difficulty = "beginner" | "intermediate" | "advanced";
 
+// CEFR level for IELTS Band 6.5–8.0 targeting (B2–C1 focus).
+// Optional: existing entries may omit it; new IELTS-focused entries should set it.
+export type CefrLevel = "A2" | "B1" | "B2" | "C1" | "C2";
+
+// Grammatical word-family forms. Only include a key when the form genuinely
+// exists and is semantically the same headword (not a different meaning).
+export interface WordFamily {
+  noun?: string[];
+  verb?: string[];
+  adjective?: string[];
+  adverb?: string[];
+}
+
 export interface Word {
   id: string;
   word: string;
@@ -29,7 +42,18 @@ export interface Word {
   difficulty: Difficulty;
   exams: Exam[];
   category: string;
+  // ---- IELTS enrichment (optional, backward-compatible) ----
+  cefr?: CefrLevel;
+  // Topic/subtopic label (one of the 8 IELTS domains or a functional category).
+  topic?: string;
+  // 2–4 natural, validated collocations using the headword.
+  collocations?: string[];
+  // Grammatical word-family forms (same headword, different POS).
+  wordFamily?: WordFamily;
+  // A genuine common learner error or usage note (not invented).
+  commonMistake?: string;
 }
+
 
 export const sampleWords: Word[] = [
   // ============================================================

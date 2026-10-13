@@ -40,6 +40,7 @@ import type { Word } from "@/lib/vocab/sample-data";
 import { useToast } from "@/hooks/use-toast";
 import {
   BengaliText,
+  CefrBadge,
   DifficultyBadge,
   EmptyState,
   ExamBadges,
@@ -299,6 +300,16 @@ function WordRow({
 
       {expanded && (
         <div className="mt-3 space-y-3 border-t pt-3 text-sm">
+          {(word.topic || word.cefr) && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              {word.cefr && <CefrBadge cefr={word.cefr} />}
+              {word.topic && (
+                <Badge variant="outline" className="text-[10px] text-muted-foreground">
+                  {word.topic}
+                </Badge>
+              )}
+            </div>
+          )}
           <div>
             <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Definition
@@ -311,6 +322,20 @@ function WordRow({
                 Example
               </p>
               <p className="italic text-foreground/90">&ldquo;{word.example}&rdquo;</p>
+            </div>
+          )}
+          {word.collocations && word.collocations.length > 0 && (
+            <div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Collocations
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {word.collocations.map((c) => (
+                  <Badge key={c} variant="secondary" className="font-normal">
+                    {c}
+                  </Badge>
+                ))}
+              </div>
             </div>
           )}
           <div className="grid gap-3 sm:grid-cols-2">
@@ -343,6 +368,46 @@ function WordRow({
               </div>
             )}
           </div>
+          {word.wordFamily &&
+            Object.values(word.wordFamily).some((arr) => arr && arr.length > 0) && (
+              <div>
+                <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  Word family
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {word.wordFamily.noun && word.wordFamily.noun.length > 0 && (
+                    <span className="text-xs">
+                      <span className="text-muted-foreground">noun: </span>
+                      {word.wordFamily.noun.join(", ")}
+                    </span>
+                  )}
+                  {word.wordFamily.verb && word.wordFamily.verb.length > 0 && (
+                    <span className="text-xs">
+                      <span className="text-muted-foreground">verb: </span>
+                      {word.wordFamily.verb.join(", ")}
+                    </span>
+                  )}
+                  {word.wordFamily.adjective && word.wordFamily.adjective.length > 0 && (
+                    <span className="text-xs">
+                      <span className="text-muted-foreground">adjective: </span>
+                      {word.wordFamily.adjective.join(", ")}
+                    </span>
+                  )}
+                  {word.wordFamily.adverb && word.wordFamily.adverb.length > 0 && (
+                    <span className="text-xs">
+                      <span className="text-muted-foreground">adverb: </span>
+                      {word.wordFamily.adverb.join(", ")}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+          {word.commonMistake && (
+            <div className="rounded-md bg-amber-500/10 p-2 text-xs text-foreground/90">
+              <span className="font-semibold text-amber-700 dark:text-amber-300">Common mistake: </span>
+              {word.commonMistake}
+            </div>
+          )}
           {isCustom && (
             <div className="flex justify-end">
               <Button

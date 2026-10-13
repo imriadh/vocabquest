@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Volume2, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { speak, speechSupported } from "@/lib/vocab/speech";
-import type { Difficulty, Exam, Word } from "@/lib/vocab/sample-data";
+import type { CefrLevel, Difficulty, Exam, Word } from "@/lib/vocab/sample-data";
 import { cn } from "@/lib/utils";
 
 const DIFFICULTY_STYLES: Record<Difficulty, string> = {
@@ -13,6 +13,23 @@ const DIFFICULTY_STYLES: Record<Difficulty, string> = {
   intermediate: "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30",
   advanced: "bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30",
 };
+
+const CEFR_STYLES: Record<CefrLevel, string> = {
+  A2: "bg-slate-500/10 text-slate-600 dark:text-slate-300",
+  B1: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+  B2: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
+  C1: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
+  C2: "bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300",
+};
+
+export function CefrBadge({ cefr }: { cefr?: CefrLevel }) {
+  if (!cefr) return null;
+  return (
+    <Badge variant="secondary" className={cn("text-[10px] font-semibold", CEFR_STYLES[cefr])} title="CEFR level (estimated)">
+      {cefr}
+    </Badge>
+  );
+}
 
 export function DifficultyBadge({ difficulty }: { difficulty: Difficulty }) {
   return (
@@ -88,6 +105,7 @@ export function WordListBadges({ word }: { word: Word }) {
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       <DifficultyBadge difficulty={word.difficulty} />
+      <CefrBadge cefr={word.cefr} />
       <ExamBadges exams={word.exams} />
       {word.category && (
         <Badge variant="outline" className="text-[10px] text-muted-foreground">
