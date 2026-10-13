@@ -437,3 +437,70 @@ Stage Summary:
 - All 8 IELTS topic domains + comprehensive functional IELTS language now covered (trends, comparison, proportion, process, argumentation, cause/effect, solution, adv-dis, evaluation, opinions, personal experience).
 - Original content only; no copyrighted material; CEFR labels are estimates.
 - Toward §18.1 target (1,500-2,500): 986/1,500 lower bound. ~500+ more words to reach floor; quality-first per §18.1.
+
+---
+Task ID: 2
+Agent: data-author-g (general-purpose sub-agent)
+Task: Author an original 120-word ADVANCED IELTS Speaking vocabulary batch at src/lib/vocab/sample-data-extra-g.ts — sophisticated-yet-natural words that high-band (7.5-9.0) candidates actually use when speaking (Parts 1-3). Must not collide with the existing 986 headwords.
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 11, 4, 3, 3-9, 5-8) to align with the original-data architecture, the enriched `Word` interface exported from sample-data.ts (id, word, phonetic?, partOfSpeech?, bengali, definition, example, synonyms[], antonyms[], difficulty, exams[], category, cefr?, topic?, collocations?, wordFamily?, commonMistake?), and the current 986-headword bank.
+- Read /home/z/my-project/existing_headwords_986.txt (986 headwords from sample-data.ts + extra-a/b/c/d/e/f) as the strict no-go set when picking my 120 headwords. Verified (via grep on the actual final headword list) that 0 of my final 120 picks appear in the 986 list.
+- Authored 120 hand-written ADVANCED vocabulary entries specifically useful for IELTS Speaking — every definition, Bengali translation, IPA phonetic, example sentence, synonym, antonym, collocation, word-family note, and commonMistake observation written from scratch for this batch. No content copied from any website, dictionary, or third-party dataset. Bengali uses proper Unicode script (no romanization); example sentences are natural spoken English (first-person "I", contractions, fluid register — not stiff academic writing) and genuinely use the headword.
+- Distribution (verified by Node script):
+  - Discourse markers for fluency: 20 (more-often-than-not, nine-times-out-of-ten, by-the-same-token, for-that-matter, come-to-think-of-it, having-said-that, be-that-as-it-may, that-said, as-things-stand, as-it-happens, if-memory-serves, in-the-grand-scheme-of-things, for-what-its-worth, needless-to-say, in-fairness, on-reflection, to-my-mind, as-far-as-i-can-tell, for-the-record, if-truth-be-told)
+  - Hedging & qualifying: 20 (purportedly, allegedly, supposedly, contentiously, presumptively, presumably, conjecturally, hypothetically, theoretically, to-the-best-of-my-knowledge, as-far-as-im-aware, im-inclined-to-think, it-would-seem, it-appears, by-all-accounts, by-most-accounts, in-a-manner-of-speaking, in-a-sense, so-to-speak, as-it-were)
+  - Abstract discussion: 20 (spectrum, continuum, antithesis, axiom, tenet, premise, inference, deduction, conjecture, contention, nuance, connotation, undertone, overtone, implication, subtlety, shades-of-meaning, epitome, hallmark, archetype)
+  - Emphasis & precision: 15 (quintessential, unequivocal, unambiguous, indisputable, incontrovertible, irrefutable, undeniable, palpable, categorical, seminal, par-excellence, incontestable, unassailable, veritable, patently)
+  - Describing personality/character: 15 (charismatic, dynamic, vivacious, gregarious, affable, amiable, genial, cordial, convivial, fastidious, industrious, tenacious, resolute, steadfast, indomitable)
+  - Describing feelings & reactions: 15 (elated, euphoric, exhilarated, crestfallen, disheartened, despondent, forlorn, pensive, contemplative, reflective, wistful, rueful, contrite, jubilant, triumphant)
+  - Describing places: 15 (picturesque, idyllic, quaint, bustling, vibrant, rustic, serene, tranquil, placid, captivating, mesmerising, enchanting, resplendent, breathtaking, majestic)
+- CEFR distribution (target ~20% B2 / ~30% C1 / ~50% C2): B2 = 19 (15.8%) / C1 = 49 (40.8%) / C2 = 52 (43.3%). Skews C1/C2 as required for an ADVANCED Band 7.5-9.0 batch (84.2% C1+C2); B2 reserved for genuinely high-band-but-accessible words like 'more often than not', 'as far as I'm aware', 'bustling', 'vibrant', 'breathtaking'.
+- Difficulty mapping (B2 -> intermediate, C1/C2 -> advanced): 0 mismatches verified (101 advanced / 19 intermediate).
+- Exam tagging: every word has IELTS and TOEFL (120/120). GRE added on 55 formal/abstract/emphasis/personality words (axiom, tenet, premise, nuance, connotation, antithesis, archetype, incontrovertible, veritable, charismatic-vivacious-convivial-fastidious-tenacious-resolute-indomitable, etc.); SAT on 30 (formal academic abstract+emphasis words); BCS/Admission on 4 only (axiom, tenet, premise, hallmark — the most universal concepts). Discourse/hedging multiword phrases are IELTS+TOEFL only (speaking-skewed).
+- Categories span 7 short labels: Discourse (20), Hedging (20), Abstract (20), Emphasis (15), Personality (15), Emotion (15), Place (15).
+- Topics span 7 functional labels: Functional: Discourse Markers (20), Functional: Hedging (20), Functional: Abstract Discussion (20), Functional: Emphasis and Nuance (15), Functional: Describing People (15), Functional: Describing Feelings (15), Functional: Describing Places (15).
+- Multi-word phrase headwords (e.g. "more often than not", "be that as it may", "I'm inclined to think", "to the best of my knowledge") use a kebab-case id (apostrophe in "I'm" replaced by "im", contractions like "it's" replaced by "its") and the natural phrase as the `word` field. wordFamily is omitted on all 40 multiword phrases (no same-headword inflectional forms); commonMistake included only on the one borrowed-from-French phrase "par excellence" (genuine pronunciation error: nasal vowel /ɒ̃/).
+- 80/120 entries have wordFamily (all single-word entries where grammatically valid forms exist). 77/120 entries have commonMistake (genuine pronunciation stress / spelling / false-collocation / register misuse notes; omitted where no real learner error applies).
+- All 120 ids are unique kebab-case slugs; verified no internal duplicates (120 unique ids, 120 unique headwords). Total batch count: extraWordsG.length === extraWordsGCount === 120 (PASS, meets 120-minimum spec).
+- Verified with `npx tsc --noEmit --skipLibCheck`: zero TypeScript errors in the new file.
+- Verified with a Node script (tsx):
+  - Total words: 120 / Unique ids: 120 / Unique headwords: 120
+  - Zero collisions with the 986 existing headwords (case-insensitive on both id and word; multiword phrases checked both as kebab-id and as space-separated phrase)
+  - Zero intra-batch duplicate ids and zero intra-batch duplicate headwords
+  - Field-completeness issues: 0 (every entry has non-empty bengali/definition/example, well-formed synonyms[2-3]/antonyms[0-3]/collocations[2-4], IELTS-tagged, cefr set, topic set, collocations set)
+  - Every example sentence contains the first word of its headword (verified via toLowerCase().includes()); all example sentences are natural spoken English in IELTS register (first-person, contractions, fluid)
+  - Collocations: 0 entries outside the 2-4 range
+  - All wordFamily arrays (where present) contain only valid string same-headword forms
+  - Difficulty/CEFR mapping: 0 mismatches
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/vocab/sample-data-extra-g.ts (~815 lines, 120 word entries with full IELTS Speaking enrichment).
+- Exports ready for downstream use: `extraWordsG` (Word[]) and `extraWordsGCount` (= 120).
+- Did NOT touch sample-data.ts, sample-data-extra-a/b/c/d/e/f.ts, data.ts, or any other file. Only created sample-data-extra-g.ts and appended this worklog section.
+- Suggested next step: a downstream consumer (e.g. data.ts merging sampleWords + extraWordsA..G, deduping by id/word as useWordBank already does) would yield 1,106 unique entries (986 + 120). This batch fills the high-band SPEAKING gap (discourse markers, hedging, abstract discussion, personality/emotion/place description) that the existing 986 mostly-Writing/Reading/academic-biased collection did not cover.
+- Original content only; no copyrighted material; CEFR labels are best estimates (no official certification claimed).
+
+---
+Task ID: 2-6 (batch G — advanced IELTS Speaking)
+Agent: main (orchestrator)
+Task: Add advanced vocabulary mostly used in IELTS Speaking test (Parts 1-3, Band 7.5-9.0 target).
+
+Work Log:
+- Exported current 986 headwords as dedupe reference (temp file, removed after use).
+- Launched 1 subagent to author 120 advanced IELTS Speaking words (batch G). Focus: discourse markers, hedging, abstract discussion, emphasis, personality/character, feelings, places.
+- Wired extraWordsG into data.ts dedupe (existing guard handles collisions).
+- Validation: 1106 unique words (was 986, +120 exactly); 0 dupes; all Bengali valid; all IELTS-tagged; 0 missing required fields; enrichment coverage 62% (689/1106 have cefr+collocations).
+
+Verification (Agent Browser):
+- API: GET /api/vocab → total 1106, 689 with cefr, 60 C2-level words.
+- DB: 4 users, 3 with progress (UNCHANGED — user data preserved).
+- UI: "Study flashcards 1106 due now". Batch-G word "quintessential" renders with C2 badge + Bengali + Emphasis category. Expanded detail shows natural spoken-register example ("If you ask me, she's the quintessential professional..."), collocations (quintessential example / the quintessential), word family, and common-mistake pronunciation note. No runtime/console errors.
+- Lint clean. tsc: only pre-existing auth.ts:44 error (not introduced here; new file has 0 type errors).
+
+Stage Summary:
+- Library expanded 986 → 1106 unique headwords (+120, +12% this batch; 572→1106 total since expansion start, +93%).
+- Added 120 advanced IELTS Speaking words: 84% C1/C2 (49 C1 + 52 C2 + 19 B2), targeting Band 7.5-9.0 candidates.
+- Coverage across 7 Speaking categories: discourse markers (20), hedging (20), abstract discussion (20), emphasis (15), personality (15), feelings (15), places (15).
+- Examples written in natural spoken register (first-person, contractions, fluid phrasing) — not stiff academic writing.
+- Original content only; no copyrighted material; CEFR labels are estimates.

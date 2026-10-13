@@ -7,6 +7,7 @@ import { extraWordsC } from "./sample-data-extra-c";
 import { extraWordsD } from "./sample-data-extra-d";
 import { extraWordsE } from "./sample-data-extra-e";
 import { extraWordsF } from "./sample-data-extra-f";
+import { extraWordsG } from "./sample-data-extra-g";
 import { enrichmentMap } from "./enrichment-map";
 import type { Word } from "./sample-data";
 
@@ -52,6 +53,7 @@ export const allSampleWords = applyEnrichment(
     ...extraWordsD,
     ...extraWordsE,
     ...extraWordsF,
+    ...extraWordsG,
   ])
 );
 
@@ -63,6 +65,7 @@ export {
   extraWordsD,
   extraWordsE,
   extraWordsF,
+  extraWordsG,
   enrichmentMap,
 };
 export type { Word, Difficulty, Exam, CefrLevel, WordFamily } from "./sample-data";
