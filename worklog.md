@@ -533,3 +533,166 @@ Stage Summary:
 - Grammar progress persists locally (guest) and syncs to the user's account on login (reuses existing blob).
 - All content original; no copyrighted material; Bengali explanations included.
 - Milestones 2-5 remain (Task 1/Task 2 specific lessons, AI writing feedback, advanced C/D topics, full test suite).
+
+---
+Task ID: 2
+Agent: general-purpose (Academic Task 1 grammar lessons author)
+Task: Create src/lib/grammar/lessons-academic-task1.ts — 6 original, hand-authored IELTS Academic Writing Task 1 grammar lessons (Level C / B2).
+
+Work Log:
+- Read shared worklog (Task 1 + Milestone 1 entry) to align with the original-data rule and to confirm the GrammarLesson schema and the 11 already-published lesson IDs/prerequisites (sentence-structure, subject-verb-agreement, tenses-foundation, articles-a-an-the, countable-uncountable-quantifiers, comparatives-superlatives, present-perfect-vs-past-simple, compound-complex-sentences, conditionals, relative-clauses, active-passive-voice).
+- Read src/lib/grammar/types.ts (GrammarLesson + GrammarExercise interfaces — did NOT modify; only imported the types) and src/lib/grammar/lessons-data.ts (studied the 11 existing lessons for style, exercise-type mix, acceptable-answer conventions, and explanation depth).
+- Authored 6 original Level C / B2 lessons covering the Academic Task 1 grammar topics from AGENT.md §4A:
+  1. t1-tense-choice — Tense Choice for Academic Task 1 Charts (prereqs: tenses-foundation, present-perfect-vs-past-simple)
+  2. t1-data-comparisons — Comparatives, Superlatives & Proportional Comparisons for Data (prereq: comparatives-superlatives)
+  3. t1-quantifiers-data — Quantifiers & Proportions for Statistics (prereqs: countable-uncountable-quantifiers, subject-verb-agreement)
+  4. t1-process-passive — Passive Voice for Process Descriptions (prereq: active-passive-voice)
+  5. t1-prepositions-data — Prepositions for Dates, Periods, Values & Comparisons (prereq: tenses-foundation)
+  6. t1-overview-sentences — Overview Statements & Complex Sentences for Trends (prereqs: compound-complex-sentences, relative-clauses)
+- Each lesson: 3 objectives, an original explanation paragraph, accurate Bengali Unicode explanation, a pattern string, 4 correct chart/data/process-context examples (each with a note identifying the structure), 2 incorrect examples (each with sentence + error + correction), 3 common mistakes, 2 IELTS applications (all task="Academic Task 1" with a Task-1-specific note), 4 exercises (IDs prefixed t1tc-/t1dc-/t1qd-/t1pp-/t1pd-/t1os-), prerequisites, estimatedMinutes, version=1, status="published".
+- Exercise type mix: mc, fill-blank, error-id, correction, transformation, combine. Each exercise has id, type, prompt, answer, explanation, difficulty (1-3); mc items include options; reasonable alternatives are listed in `acceptable`.
+- File format matches the spec exactly: `import type { GrammarLesson } from "./types";` header, originality comment, `export const academicTask1Lessons: GrammarLesson[] = [...]`, and `export const academicTask1LessonCount = academicTask1Lessons.length;`. Double quotes throughout; apostrophes inside double-quoted strings (no string breakage).
+- Did NOT modify any other files. types.ts and lessons-data.ts untouched.
+
+Verification:
+- `npx tsc --noEmit --strict --skipLibCheck src/lib/grammar/lessons-academic-task1.ts src/lib/grammar/types.ts` → 0 errors.
+- Programmatic field-by-field check (run via tsx against the compiled module): 6 lessons, 0 issues. Every lesson has level="C", cefrLevel="B2", version=1, status="published", exactly 3 objectives, >=3 examples, exactly 2 incorrectExamples, >=2 commonMistakes, exactly 2 ieltsApplications (all task="Academic Task 1"), exactly 4 exercises. All mc exercises have >=2 options. All exercises have id/type/prompt/answer/explanation/difficulty populated.
+- Pre-existing project-wide tsc errors (examples/websocket, skills/stock-analysis, src/lib/auth.ts:44) are unrelated to this task and were NOT introduced here.
+
+Stage Summary:
+- 6 original Academic Task 1 grammar lessons (24 exercises total) authored at src/lib/grammar/lessons-academic-task1.ts, Level C / B2, ready to be wired into the Grammar tab's Level C path by the orchestrator.
+- All content original (no Cambridge/Oxford/BC/IELTS-official material); Bengali explanations included; prerequisites correctly reference existing lesson IDs.
+
+---
+Task ID: 4 (grammar lessons — Writing Task 2 essays)
+Agent: data-author-grammar-task2 (general-purpose sub-agent)
+Task: Author 6 original, hand-authored IELTS grammar lessons at /home/z/my-project/src/lib/grammar/lessons-task2.ts — Level C / B2 — specifically for Writing Task 2 essays, covering AGENT.md §4C topics: hedging & cautious claims, concession & contrast clauses, cause & effect clauses, passive reporting, parallel structures, and fragments/run-ons/comma splices.
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 3, 4, 3-9, 5-8, 2, 2-6, grammar-milestone-1) to align with the original-data architecture, the GrammarLesson + GrammarExercise interfaces in src/lib/grammar/types.ts (DO NOT modify), and the existing 11 lessons in src/lib/grammar/lessons-data.ts (Levels A & B; lesson IDs already in use: sentence-structure, subject-verb-agreement, tenses-foundation, articles-a-an-the, countable-uncountable-quantifiers, comparatives-superlatives, present-perfect-vs-past-simple, compound-complex-sentences, conditionals, relative-clauses, active-passive-voice). Confirmed prerequisites reference real lesson IDs.
+- Studied style of existing 11 lessons: academic register, concise explanations, proper Unicode Bengali summaries (range U+0980-U+09FF), pattern field, 3+ correct examples with notes, 2+ incorrect examples (sentence+error+correction), 2+ common mistakes, 2+ IELTS applications (Task 2 explicit), 4 exercises each, MC answers always present in options[].
+- Authored 6 hand-written lessons — every explanation, Bengali summary, pattern, correct example, incorrect example, common mistake, IELTS application, exercise prompt, answer, acceptable-alternatives, and explanation written from scratch. No content copied from Cambridge, Oxford, British Council, IELTS official materials, or any third-party source. Bengali uses proper Unicode script throughout.
+- File format follows the spec exactly: `import type { GrammarLesson } from "./types";` then `export const task2Lessons: GrammarLesson[] = [...]` and `export const task2LessonCount = task2Lessons.length;`. Double quotes for strings; apostrophes inside strings escaped as `\'` per spec.
+
+Lesson-by-lesson (all level "C", cefrLevel "B2", status "published", version 1):
+
+1. `t2-hedging` — "Hedging & Cautious Academic Claims" (topic: Register; subtopic: Hedging and cautious claims). Prereqs: ["compound-complex-sentences"]. 14 min. Covers may, might, could, tends to, appears to, seems to, is likely to, arguably, "It could be argued that..."; when to hedge vs state firmly; overclaiming vs over-hedging. 4 examples, 2 incorrect, 3 common mistakes, 2 IELTS apps (both Task 2). Exercises: t2h-1 mc / t2h-2 fill-blank (accepts appears/seems/tends) / t2h-3 correction / t2h-4 error-id. Difficulties: 2/2/3/3.
+
+2. `t2-concession` — "Concession & Contrast Clauses" (topic: Clauses; subtopic: Concession and contrast). Prereqs: ["compound-complex-sentences"]. 14 min. Covers although, even though, though, while, whereas, despite + noun/V-ing, in spite of; comma after fronted concession clause; double conjunctions ("although…but") and despite+clause errors. 4 examples, 2 incorrect, 4 common mistakes, 2 IELTS apps. Exercises: t2c-1 mc / t2c-2 error-id / t2c-3 correction (4 acceptable forms) / t2c-4 combine. Difficulties: 2/2/3/2.
+
+3. `t2-cause-effect` — "Cause & Effect Clauses" (topic: Cohesion; subtopic: Cause and effect). Prereqs: ["compound-complex-sentences"]. 14 min. Covers because, since, as, so (clauses); therefore, consequently, as a result (sentence connectors); due to, owing to, because of + noun/V-ing (phrases); double conjunctions ("because…so") and "due to + clause" errors. 4 examples, 2 incorrect, 4 common mistakes, 2 IELTS apps. Exercises: t2ce-1 mc / t2ce-2 correction (4 acceptable) / t2ce-3 fill-blank (consequently/therefore) / t2ce-4 combine. Difficulties: 2/3/2/2.
+
+4. `t2-passive-reporting` — "Passive Voice in Essays & Reporting Structures" (topic: Voice; subtopic: Passive reporting in essays). Prereqs: ["active-passive-voice"]. 14 min. Covers "It is widely believed that…", "It has been argued that…", "It is often claimed that…"; passive for introducing general views vs active for writer's own position; overuse and stacked passives; dummy subject "It" requirement. 4 examples, 2 incorrect, 4 common mistakes, 2 IELTS apps. Exercises: t2p-1 mc / t2p-2 transformation (3 acceptable) / t2p-3 correction (3 acceptable) / t2p-4 error-id. Difficulties: 2/3/2/2.
+
+5. `t2-parallelism` — "Parallel Structures in Lists & Comparisons" (topic: Sentence structure; subtopic: Parallel structures). Prereqs: ["compound-complex-sentences"]. 14 min. Covers parallelism in lists and comparisons (as much X as Y); correlative pairs (both…and, either…or, neither…nor, not only…but also); faulty parallelism (V-ing vs to-infinitive; noun phrase vs verb phrase). 4 examples, 2 incorrect, 4 common mistakes, 2 IELTS apps. Exercises: t2pa-1 mc / t2pa-2 correction (2 acceptable) / t2pa-3 error-id / t2pa-4 combine. Difficulties: 2/2/2/1.
+
+6. `t2-fragments-runnons` — "Fragments, Run-Ons & Comma Splices" (topic: Punctuation; subtopic: Fragments, run-ons, comma splices). Prereqs: ["sentence-structure", "compound-complex-sentences"] (the only lesson with two prerequisites, per spec). 16 min. Covers fragment identification (subordinator-only clause), run-on (no punctuation/conjunction), comma splice (comma only); three fixes (conjunction + comma / period + capital / semicolon); attaching "because/although" fragments to a main clause. 4 examples, 2 incorrect, 4 common mistakes, 2 IELTS apps. Exercises: t2f-1 mc / t2f-2 error-id (run-on) / t2f-3 correction (3 acceptable fixes) / t2f-4 correction (4 acceptable). Difficulties: 2/2/2/3.
+
+Validation:
+- Verified with `npx tsc --noEmit --skipLibCheck`: zero TypeScript errors in lessons-task2.ts. (Pre-existing project-wide tsc errors in examples/websocket, skills/stock-analysis, src/lib/auth.ts:44 are unrelated and were NOT introduced here — confirmed unchanged.)
+- Verified with a Node script (node --experimental-strip-types) validating every GrammarLesson + GrammarExercise field:
+  - task2Lessons.length === task2LessonCount === 6 (PASS, meets the 6-minimum spec)
+  - Total exercises: 24 (4 per lesson, exactly as required)
+  - Unique lesson ids: 6 of 6 (no duplicates); unique lesson slugs: 6 of 6
+  - Unique exercise ids: 24 of 24 (no duplicates); all exercise ids match the expected prefix+ordinal pattern (t2h-1..4, t2c-1..4, t2ce-1..4, t2p-1..4, t2pa-1..4, t2f-1..4)
+  - All lessons have level="C", cefrLevel="B2", status="published", version=1
+  - All lessons have 3 objectives, 4+ examples (3 correct min met), 2 incorrect examples (each with sentence+error+correction), 2+ common mistakes, 2+ IELTS applications, every ieltsApplications array contains at least one "Writing Task 2" entry
+  - All MC exercises have options[] with 2+ entries and the answer is in options[]
+  - All exercise difficulties are 1, 2, or 3
+  - All exercise types are valid (mc / fill-blank / correction / error-id / transformation / combine)
+  - All bengaliExplanation fields contain Bengali Unicode characters (range U+0980-U+09FF verified)
+  - All pattern fields present; all subtopic fields present
+  - Prerequisites match spec EXACTLY for all 6 lessons (t2-passive-reporting → ["active-passive-voice"]; t2-fragments-runnons → ["sentence-structure", "compound-complex-sentences"]; the other four → ["compound-complex-sentences"])
+  - 0 errors, 0 warnings
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/grammar/lessons-task2.ts (719 lines, 6 lessons, 24 exercises, all original content).
+- Exports ready for downstream use: `task2Lessons` (GrammarLesson[]) and `task2LessonCount` (= 6).
+- Did NOT touch types.ts, lessons-data.ts, evaluate.ts, or any other project file. Only created lessons-task2.ts and appended this worklog section. (A temporary validation script was created at /home/z/my-project/validate-task2.mjs during authoring and removed after final validation passed.)
+- Suggested next step: orchestrator wires `task2Lessons` into the Grammar tab's Level C path alongside `lessons-academic-task1.ts` (Task 1 lessons) and `lessons-gt-letters.ts` (General Training letters), giving Level C a complete Writing-strand curriculum: Task 1 Academic + Task 1 General Training letters + Task 2 essays. All three files import GrammarLesson from ./types and export a `<collection>Lessons` array + `<collection>LessonCount` number, so the merge is a one-liner concat.
+- All content original; no copyrighted material; CEFR labels (B2) are best estimates aligned with the existing Level C = "Writing Development (B2)" convention; Bengali explanations included throughout.
+
+---
+Task ID: 3
+Agent: grammar-gt-letters (general-purpose sub-agent)
+Task: Author 3 original, hand-authored IELTS General Training Writing Task 1 (letters) grammar lessons at Level C / B2 in a new file src/lib/grammar/lessons-gt-letters.ts (AGENT.md §4B). Cover: (1) formal/neutral/informal register in letters, (2) modal verbs for requests/advice/offers/obligations, (3) polite/indirect questions + future forms + pronoun clarity.
+
+Work Log:
+- Read shared worklog (Tasks 1, 5, 6-10, 2-a, 2-b, 11, 4, 3, 3-9, 2, 2-6, grammar-milestone-1) to align with the existing grammar architecture: lessons are static TS data in src/lib/grammar/, types in types.ts, 11 existing lessons in lessons-data.ts (Milestone 1, Levels A/B), progress stored in the vocab-store grammar slice.
+- Read /home/z/my-project/src/lib/grammar/types.ts to confirm the GrammarLesson + GrammarExercise interface (all required fields: id, slug, title, level, cefrLevel, topic, subtopic?, objectives[], explanation, bengaliExplanation?, pattern?, examples[], incorrectExamples[], commonMistakes[], ieltsApplications[], exercises[], prerequisites[], estimatedMinutes, version, status). Did NOT modify types.ts.
+- Read /home/z/my-project/src/lib/grammar/lessons-data.ts (the existing 11 lessons) to learn the style, depth, and conventions: Level A/B lessons, 4 exercises per lesson, exercise id prefixes per lesson (ss-, sva-, tf-, art-, cu-, cs-, pp-, cc-, cd-, rc-, ap-), double-quoted strings, apostrophes inside double-quoted strings left unescaped (matching the codebase reference style), Bengali explanations in proper Unicode, IELTS applications tag the task type explicitly.
+- Read /home/z/my-project/src/lib/grammar/evaluate.ts to confirm the answer normaliser (trim + lowercase + collapse whitespace + strip trailing .?!) so my `acceptable` alternative arrays will match.
+- Confirmed the 11 existing lesson ids (sentence-structure, subject-verb-agreement, tenses-foundation, articles-a-an-the, countable-uncountable-quantifiers, comparatives-superlatives, present-perfect-vs-past-simple, compound-complex-sentences, conditionals, relative-clauses, active-passive-voice) and chose non-colliding new ids: gt-register, gt-modals-requests, gt-polite-questions. None collide.
+- Authored 3 hand-written lessons. All explanations, Bengali summaries, patterns, examples (correct + incorrect), common mistakes, IELTS applications, and exercises written from scratch for this project. No content copied from Cambridge, Oxford, British Council, IELTS official materials, or any website. Bengali uses proper Unicode script (no romanisation). All example sentences are natural IELTS General Training letter English across varied register (formal complaint, neutral to a landlord, informal to a friend, polite requests, advice, future arrangements).
+
+Lesson 1 — gt-register (slug: letter-register-formal-neutral-informal) — "Letter Register: Formal, Neutral & Informal"
+- topic: Register / subtopic: Letter register. level C / B2. prerequisites: ["compound-complex-sentences"]. est. 12 min.
+- Objectives (3): distinguish formal/neutral/informal and match to recipient+purpose; choose salutation+closing pair per register; use contractions only in informal.
+- Examples (4 correct, letter-style, each with a note): formal complaint opening (Dear Sir or Madam... refund), neutral to landlord (Dear Mr Patel... room), informal to friend (Hi Meera... picnic), formal closing phrase (I look forward to receiving your reply at your earliest convenience).
+- incorrectExamples (2 with sentence+error+correction): "Dear Sir, I'll pop round tomorrow to sort out the boiler." (register clash formal vs informal body); "Hi Dave, I am writing to inquire whether it would be convenient..." (informal opening vs overly formal body).
+- commonMistakes (4): mixing registers in one letter; contractions in formal/neutral; unnatural "Dear friend"/"Dear Mister John"; wrong opening+closing pair.
+- ieltsApplications (3, all task="General Training Task 1"): prompt line decides register; verb choice follows recipient; opening+closing form fixed pairs.
+- exercises (4, ids gtr-1..4): gtr-1 mc (most appropriate opening for unknown recipient); gtr-2 fill-blank ("I look forward ____ hearing from you." -> to); gtr-3 error-id (register problem in informal-letter sentence); gtr-4 transformation (rewrite overly formal sentence for an informal letter).
+
+Lesson 2 — gt-modals-requests (slug: modal-verbs-requests-advice-offers-obligations) — "Modal Verbs: Requests, Advice, Offers & Obligations"
+- topic: Modals / subtopic: Requests and politeness. level C / B2. prerequisites: ["compound-complex-sentences"]. est. 14 min.
+- Objectives (3): polite requests with could/would + "I would be grateful if you could..."; advice with should/ought to/had better; obligation (must/have to) vs no obligation (do not have to/need not) + may/might.
+- Examples (5 correct): "Could you please send me the updated invoice..."; "I would be grateful if you could confirm the reservation in writing."; "You should keep a copy of the receipt..."; "Visitors must not leave bags unattended..."; "You do not have to print the ticket...". Each with a note on the modal's function.
+- incorrectExamples (2): "I would be grateful if you can send me the catalogue." (can -> could); "You must not pay the registration fee in advance..." (must not -> do not have to; prohibition vs no obligation).
+- commonMistakes (4): adding "to" after a modal; must not vs do not have to; can in formal requests; -s after modal in third person.
+- ieltsApplications (3, all General Training Task 1): letters asking for help/info/action need could/would; advice letters to a friend use should/ought to/had better; complaint letters may need must/have to.
+- exercises (4, ids gtm-1..4): gtm-1 mc (most polite request); gtm-2 fill-blank ("I would be grateful if you ____ confirm the booking" -> could); gtm-3 correction ("You must not pay the deposit now..." -> do not have to); gtm-4 error-id ("You should to bring a warm jacket..." -> should to bring).
+
+Lesson 3 — gt-polite-questions (slug: indirect-questions-and-future-forms-in-letters) — "Polite Questions, Indirect Requests & Future Forms in Letters"
+- topic: Cohesion / subtopic: Indirect requests. level C / B2. prerequisites: ["gt-modals-requests"] (this lesson builds on Lesson 2). est. 14 min.
+- Objectives (3): indirect Y/N + wh-questions with "Could you let me know whether/when/where..." and "I was wondering if you could..."; future forms (present continuous for arrangements, be going to for intentions, will for decisions/predictions); pronoun clarity in letters with several people.
+- Examples (5 correct): "Could you let me know whether the room is still available..." (statement word order); "I was wondering if you could forward my application..."; "I will be arriving at the airport at 6.40 p.m...." (future continuous); "I am going to bring the documents with me..."; "The landlord has agreed to repair the window, and he will start the work on Monday." (clear pronoun).
+- incorrectExamples (2): "Could you let me know when will the training start?" (question word order in indirect question); "I will to bring the report when I will meet my supervisor tomorrow." (to after will + will in when-clause).
+- commonMistakes (4): question word order in indirect questions; will in time clauses (when/before/as soon as); will for fixed timetables; vague pronoun reference.
+- ieltsApplications (3, all General Training Task 1): information-request letters as indirect questions; future-plan letters need mixed future forms; multi-person letters need careful pronoun reference.
+- exercises (4, ids gtp-1..4): gtp-1 mc (correct indirect question — statement word order); gtp-2 fill-blank ("I was wondering ____ you could send me a copy..." -> if/whether); gtp-3 correction ("I will call you when I will reach the hotel." -> when I reach); gtp-4 error-id ("The train will leave at 9.30 tomorrow morning..." -> will leave; fixed timetable uses present simple).
+
+File format: matches the requested signature exactly — `import type { GrammarLesson } from "./types";`, `export const gtLetterLessons: GrammarLesson[] = [...]`, `export const gtLetterLessonCount = gtLetterLessons.length;`. Double quotes throughout. Original-content header comment. 472 lines.
+
+Verification:
+- `npx tsc --noEmit --skipLibCheck`: zero TypeScript errors in lessons-gt-letters.ts (the only errors reported are pre-existing in examples/websocket/*, skills/*, and src/lib/auth.ts:44 — none in the new file).
+- Node structural validation script (node --experimental-strip-types): ALL CHECKS PASSED.
+  - gtLetterLessonCount === 3 (=== array length).
+  - Every lesson has all 17 required fields populated; level="C", cefrLevel="B2", status="published", version=1.
+  - objectives: 3 / 3 / 3 (>= 3 each). examples: 4 / 5 / 5 (>= 3 each). incorrectExamples: 2 / 2 / 2 (>= 2 each). commonMistakes: 4 / 4 / 4 (>= 2 each). ieltsApplications: 3 / 3 / 3 with task="General Training Task 1" on every entry (>= 2 each). exercises: 4 / 4 / 4 (exactly 4 each, 12 total).
+  - bengaliExplanation present on all 3 with proper Bengali Unicode (U+0980-U+09FF range). pattern present on all 3.
+  - Exercise IDs: gtr-1, gtr-2, gtr-3, gtr-4, gtm-1, gtm-2, gtm-3, gtm-4, gtp-1, gtp-2, gtp-3, gtp-4 — exactly the requested prefixes, all unique, all 4 exercises per lesson.
+  - Every exercise has id, type, prompt, answer, explanation, difficulty (1-3). mc exercises have >= 2 options. correction/transformation/error-id/fill-blank exercises include `acceptable` alternative answers where reasonable rewordings exist (so the evaluate.ts normaliser accepts them).
+  - Prerequisites verified: gt-register -> ["compound-complex-sentences"] (resolves to existing lesson); gt-modals-requests -> ["compound-complex-sentences"] (resolves to existing lesson); gt-polite-questions -> ["gt-modals-requests"] (resolves to Lesson 2 in this same file). Prerequisite chain: compound-complex-sentences -> {gt-register, gt-modals-requests} -> gt-polite-questions.
+- Collision check vs the existing 11 lessons in lessons-data.ts: zero collisions on lesson id, lesson slug, and exercise id. New lessons integrate cleanly without touching lessons-data.ts.
+- Did NOT modify types.ts, lessons-data.ts, evaluate.ts, or any other file. Only created src/lib/grammar/lessons-gt-letters.ts and appended this worklog section.
+
+Stage Summary:
+- File created at: /home/z/my-project/src/lib/grammar/lessons-gt-letters.ts (~472 lines, 3 lessons, 12 exercises).
+- Exports ready for downstream use: `gtLetterLessons` (GrammarLesson[]) and `gtLetterLessonCount` (= 3).
+- Suggested next step: a downstream consumer (e.g. a future grammar index/data.ts that concatenates grammarLessons + gtLetterLessons, or the grammar-view.tsx Level C path) can import `gtLetterLessons` and surface them under the Level C / General Training Task 1 grouping. The lessons slot into the existing prerequisite graph with no new prerequisites to add beyond `compound-complex-sentences` (already in lessons-data.ts) and `gt-modals-requests` (defined in this file).
+- Original content only; no copyrighted material; CEFR labels are best estimates aligned to the B2 target.
+
+---
+Task ID: grammar-milestone-2
+Agent: main (orchestrator)
+Task: IELTS Grammar Learning Module — Milestone 2 (Academic Task 1 + General Training letters + Task 2 essay grammar lessons).
+
+Work Log:
+- Launched 3 parallel subagents: Academic Task 1 (6 lessons), General Training letters (3 lessons), Task 2 essays (6 lessons). All completed cleanly.
+- Wired the 3 new batch files into lessons-data.ts via spread (concat into the grammarLessons array). Updated module header comment. No schema/type changes (reused Milestone-1 GrammarLesson + GrammarExercise types).
+- Validation: 26 total lessons (was 11; +15), 104 exercises (was 44; +60); 0 lesson-id/slug dupes; 0 exercise-id dupes; all prerequisites resolve to existing lesson ids; Level distribution A=6, B=5, C=15.
+- Lint clean. tsc: only pre-existing auth.ts:44 (not introduced here). All new files have 0 type errors.
+
+Verification (Agent Browser):
+- Grammar tab: Level C "Writing Development (B2)" now populated with 15 lesson cards (was "Coming soon"). Level D still "Coming soon".
+- Opened "Hedging & Cautious Academic Claims" (Task 2): all sections render (objectives, Bengali summary, pattern, examples with "may"/"tend to", common errors with corrections, IELTS applications, 4 exercises).
+- Answered MC: chose hedged option "Social media may contribute to anxiety in some teenagers…" → "Correct" + explanation about "may" hedging. Transformation exercise: wrote a reasonable alternative → marked "Not quite" with model answer + explanation (expected: acceptable alternatives must be explicitly listed — known limitation).
+- No runtime/console errors.
+- DB: 4 users, 3 with progress (UNCHANGED). Vocab: 1106 (UNCHANGED). Existing functionality preserved.
+
+Stage Summary:
+- Milestone 2 complete and verified: +15 Level C / B2 IELTS Writing-specific lessons covering Academic Task 1 (tense choice, data comparisons, quantifiers, process passive, data prepositions, overview sentences), General Training letters (register, modal requests, polite questions), and Task 2 essays (hedging, concession, cause-effect, passive reporting, parallelism, fragments/run-ons).
+- Curriculum now: 26 lessons, 104 exercises across Levels A/B/C. Level D (C1+) remains.
+- All content original; no copyrighted material; Bengali explanations included.
+- Reused existing engine + UI + store + sync — zero new architecture.

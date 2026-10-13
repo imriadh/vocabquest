@@ -1,4 +1,4 @@
-// Original IELTS grammar curriculum — Milestone 1.
+// Original IELTS grammar curriculum.
 //
 // All explanations, examples, incorrect examples, common mistakes, IELTS
 // applications, and exercises are original, hand-authored for this project.
@@ -6,12 +6,14 @@
 // official materials, or any other third-party source. External references
 // (AGENT.md §12) were used only to prioritise topics, not to reproduce text.
 //
-// Level A = foundations (A1–A2), Level B = essential IELTS (B1).
-// Milestone 1 covers the highest-priority topics from AGENT.md §5.
-// Further lessons (Levels C/D, Task-1/Task-2 specifics) are deferred to
-// later milestones.
+// Level A = foundations (A1–A2), Level B = essential IELTS (B1),
+// Level C = IELTS Writing-specific (B2): Academic Task 1, General Training
+// letters, and Task 2 essays. Level D (C1+) remains for a future milestone.
 
 import type { GrammarLesson } from "./types";
+import { academicTask1Lessons } from "./lessons-academic-task1";
+import { gtLetterLessons } from "./lessons-gt-letters";
+import { task2Lessons } from "./lessons-task2";
 
 export const grammarLessons: GrammarLesson[] = [
   // =====================================================================
@@ -990,6 +992,13 @@ export const grammarLessons: GrammarLesson[] = [
     version: 1,
     status: "published",
   },
+
+  // =====================================================================
+  // LEVEL C — IELTS Writing-specific (B2) — Milestone 2
+  // =====================================================================
+  ...academicTask1Lessons,
+  ...gtLetterLessons,
+  ...task2Lessons,
 ];
 
 export const grammarLessonCount = grammarLessons.length;
